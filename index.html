@@ -133,49 +133,52 @@
   @media (min-width:640px){ .productos-grid{grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:16px;} }
   
   /* =========================================
-     DISEÑO LIMPIO PARA LA IMAGEN DE MADERA
+     ESTILOS ORIGINALES RESTAURADOS Y ALINEACIÓN PERFECTA
      ========================================= */
   .producto {
-    background: var(--blanco); 
-    border: none; /* Sin bordes negros rígidos */
-    border-radius: var(--radio); 
-    display: flex; 
-    flex-direction: column; 
-    transition: all .2s ease; 
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08); /* Sombra suave moderna */
-    overflow: hidden; 
-    position: relative; 
+    background: var(--crema);
+    border: 2px solid var(--carbon);
+    border-radius: var(--radio);
+    display: flex;
+    flex-direction: column;
+    transition: all .15s;
+    box-shadow: 2px 2px 0 var(--carbon);
+    overflow: hidden;
+    position: relative;
     min-width: 0;
   }
-  .producto:hover{
-    transform: translateY(-2px); 
-    box-shadow: 0 8px 16px rgba(0,0,0,0.12);
+  .producto:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0 var(--carbon);
   }
-  .producto.en-carrito{
-    box-shadow: 0 0 0 2px var(--rojo-aji), 0 8px 16px rgba(199,57,43,0.2);
+  .producto.en-carrito {
+    background: var(--miel-suave);
+    box-shadow: 4px 4px 0 var(--rojo-aji);
   }
-  .producto-foto{
-    width:100%; 
-    aspect-ratio: 4 / 3; /* Proporción para que la madera llene todo */
-    border-bottom: none; 
-    background-color: transparent; 
-    background-image:url('Catálogo.png'); 
-    background-repeat:no-repeat; 
-    background-size:400% 700%; 
-    background-position:var(--bg-pos, 0% 0%); 
-    image-rendering:-webkit-optimize-contrast;
+  .producto-foto {
+    width: 100%;
+    /* Proporción exacta de las celdas de tu imagen (1024/4 x 1533/7) */
+    aspect-ratio: 256 / 219; 
+    border-bottom: 2px solid var(--carbon);
+    background-color: transparent;
+    background-image: url('Catálogo.png');
+    background-repeat: no-repeat;
+    background-size: 400% 700%;
+    background-position: var(--bg-pos, 0% 0%);
+    image-rendering: -webkit-optimize-contrast;
   }
-  .producto-contenido{
-    padding: 12px 14px; 
-    display:flex; 
-    flex-direction:column; 
-    gap:6px; 
-    flex:1; 
-    min-width:0;
-    background: var(--blanco);
+  .producto-contenido {
+    padding: 10px 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+    min-width: 0;
   }
-  @media (min-width:640px){ .producto-contenido{padding:16px; gap:8px;} }
-  
+  @media (min-width: 640px) {
+    .producto-contenido { padding: 14px 14px 16px; gap: 8px; }
+  }
+
   .producto-nombre{font-size:13px; font-weight:700; line-height:1.25; color:var(--carbon); word-break:break-word;}
   .producto-unidad{font-family:var(--font-hand); font-size:14px; color:var(--texto-suave); margin-top:-2px; font-weight:600;}
   .producto-precio{font-family:var(--font-display); font-size:18px; font-weight:800; color:var(--rojo-aji); line-height:1; letter-spacing:-0.02em; margin-top:auto;}
@@ -186,7 +189,7 @@
     .producto-precio{font-size:22px;} .producto-precio small{font-size:11.5px;}
     .producto-rango{font-size:11px;}
   }
-  .qty-wrap{display:flex; align-items:center; gap:6px; background:var(--blanco); border:2px solid var(--borde); border-radius:var(--radio-sm); padding:5px 7px 5px 9px; transition:all .15s; min-width:0;}
+  .qty-wrap{display:flex; align-items:center; gap:6px; background:var(--blanco); border:2px solid var(--carbon); border-radius:var(--radio-sm); padding:5px 7px 5px 9px; transition:all .15s; min-width:0;}
   @media (min-width:640px){ .qty-wrap{gap:8px; padding:6px 8px 6px 12px;} }
   .producto.en-carrito .qty-wrap{background:var(--blanco); border-color:var(--rojo-aji);}
   .qty-wrap label{font-size:9.5px; font-weight:700; color:var(--texto-suave); text-transform:uppercase; letter-spacing:0.05em; flex-shrink:0;}

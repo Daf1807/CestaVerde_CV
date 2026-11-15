@@ -661,7 +661,7 @@ let estadoPedido  = { estado:'borrador', version:0, ronda:null, fecha:null, tele
 const LS_PEDIDO_ESTADO = 'misti_pedido_estado';
 
 /* Estados que bloquean al cliente (los maneja el admin) */
-const ESTADOS_BLOQUEADOS = ['aceptado','empacado','entregado','fallido'];
+const ESTADOS_BLOQUEADOS = ['aceptado','empacado','entregado','fallido','rechazado'];
 
 function pedidoBloqueado(){
   return estadoPedido
@@ -1245,7 +1245,7 @@ function renderDrawer(){
     let texto1 = 'El Misti confirmó tu pedido. Ya no puedes modificarlo desde la web.';
     if (est === 'empacado'){ titulo = 'Pedido empacado'; texto1 = 'Tu pedido está empacado. Ya no puedes modificarlo.'; }
     if (est === 'entregado'){ titulo = 'Pedido entregado'; texto1 = 'Tu pedido fue entregado. ¡Gracias por tu compra!'; }
-    if (est === 'fallido'){ titulo = 'Pedido fallido'; texto1 = 'Tu pedido fue marcado como fallido. Escríbenos por WhatsApp para revisarlo.'; }
+    if (est === 'fallido' || est === 'rechazado'){ titulo = 'Pedido no confirmado'; texto1 = 'Tu pedido no fue confirmado. Escríbenos por WhatsApp para revisarlo.'; }
     body.innerHTML = `
       <div class="confirmacion">
         <div class="confirmacion-icon">✓</div>
@@ -1701,7 +1701,7 @@ function actualizarBoleta(){
 }
 
 /* ============================================================
-   CONFIRMAR PEDIDO — POPUP-SAFE + RUTA CORRECTA + ESTADO "pendiente"
+   CONFIRMAR PEDIDO — compatible con el panel admin v17.9
    ============================================================ */
 
 async function confirmarPedido(){
@@ -1714,16 +1714,17 @@ async function confirmarPedido(){
     return;
   }
 
-  const sub  = subtotalCarrito();
-  const peso = pesoTotalCarrito();
-  const dist = calcularDistanciaKm();
-  const d    = costoDelivery();
+  const sub   = subtotalCarrito();
+  const peso  = pesoTotalCarrito();
+  const dist  = calcularDistanciaKm();
+  const d     = costoDelivery();
   const total = totalCarrito();
   const ronda = getRondaId();
 
   if (sub < MINIMO_COMPRA) return;
   if (!recogerEnLocal && (d < 0)) return;
 
+  /* --- Mensaje WhatsApp --- */
   const lineas = [];
   lineas.push('*PEDIDO — COMPRA CON MISTI*');
   lineas.push(`Ronda: ${ronda}`);
@@ -1748,9 +1749,7 @@ async function confirmarPedido(){
   lineas.push(`Pago: ${metodoPago === 'yape' ? 'Yape' : 'Efectivo'}`);
   lineas.push('');
   lineas.push('*Productos*');
-  items.forEach(i => {
-    lineas.push(`• ${i.nombre} — ${i.qty} ${i.unidad} — ${soles(i.subtotal)}`);
-  });
+  items.forEach(i => lineas.push(`• ${i.nombre} — ${i.qty} ${i.unidad} — ${soles(i.subtotal)}`));
   lineas.push('');
   lineas.push(`Subtotal: ${soles(sub)}`);
   lineas.push(`Delivery: ${recogerEnLocal ? 'Sin costo (recojo)' : soles(d)}`);
@@ -1761,36 +1760,87 @@ async function confirmarPedido(){
   const mensaje = lineas.join('\n');
   const url = `https://wa.me/${WHATSAPP_NEGOCIO}?text=${encodeURIComponent(mensaje)}`;
 
-  // ⚡ Abrir pestaña de WhatsApp ANTES del await para no ser bloqueada
+  /* ⚡ Popup-safe: abrir WhatsApp ANTES del await */
   const ventanaWA = window.open('about:blank', '_blank');
 
   if (btn){ btn.disabled = true; btn.textContent = 'Enviando…'; }
 
-  // 🎯 RUTA CORRECTA — subcolección dentro de la ronda
-  const refPedido = doc(fdb, 'rondas', ronda, 'pedidos', cliente.telefono);
+  /* 🎯 Doc ID con formato {telefono}-{ronda} (compatible con el admin) */
+  const pedidoId = `${cliente.telefono}-${ronda}`;
+  const refPedido = doc(fdb, 'rondas', ronda, 'pedidos', pedidoId);
 
+  /* 🎯 Estado inicial según método de pago (lo que espera el admin) */
+  const estadoInicial = metodoPago === 'yape' ? 'pendiente_pago_yape' : 'pendiente_pago_efectivo';
+  const metodoPagoLabel = metodoPago === 'yape' ? 'Yape' : 'Efectivo';
+  const modalidad = recogerEnLocal ? 'recojo' : 'delivery';
+
+  /* 🎯 Payload con AMBOS esquemas (snake_case para el admin + camelCase del cliente) */
   const payload = {
+    /* --- Campos que usa el ADMIN (snake_case) --- */
+    id_ronda:          ronda,
+    pedido_id:         pedidoId,
+    cliente_nombre:    cliente.nombre.trim(),
+    cliente_telefono:  cliente.telefono,
+    cliente_direccion: `${cliente.calle} ${cliente.numero}`.trim(),
+    cliente_distrito:  cliente.distrito,
+    cliente_referencia: cliente.referencia,
+    cliente_lat:       cliente.lat,
+    cliente_lng:       cliente.lng,
+    tipo_cliente:      'B2C',
+    modalidad,
+    metodo_pago:       metodoPagoLabel,
+    costo_delivery:    recogerEnLocal ? 0 : +d.toFixed(2),
+    comision_yape:     0,
+    peso_total_kg:     +peso.toFixed(2),
+    estado:            estadoInicial,
+    canal:             'web',
+    historial: [{
+      estado: estadoInicial,
+      fecha:  new Date().toISOString(),
+      nota:   'Pedido creado desde la web'
+    }],
+
+    /* --- Campos que usaba el cliente (compatibilidad) --- */
     ronda,
-    fecha: serverTimestamp(),
+    telefono:    cliente.telefono,
     cliente: {
-      nombre: cliente.nombre.trim(),
-      telefono: cliente.telefono,
-      calle: cliente.calle,
-      numero: cliente.numero,
+      nombre:     cliente.nombre.trim(),
+      telefono:   cliente.telefono,
+      calle:      cliente.calle,
+      numero:     cliente.numero,
       referencia: cliente.referencia,
-      distrito: cliente.distrito,
-      lat: cliente.lat,
-      lng: cliente.lng
+      distrito:   cliente.distrito,
+      lat:        cliente.lat,
+      lng:        cliente.lng
     },
-    entrega: recogerEnLocal ? 'recojo' : 'delivery',
+    entrega:     modalidad,
     metodoPago,
-    pesoAprox: +peso.toFixed(2),
+    delivery:    recogerEnLocal ? 0 : +d.toFixed(2),
+    pesoAprox:   +peso.toFixed(2),
     distanciaKm: dist !== null ? +dist.toFixed(2) : null,
-    items: items.map(i => ({ codigo:i.codigo, nombre:i.nombre, unidad:i.unidad, qty:i.qty, precio:i.precio, subtotal:i.subtotal })),
-    subtotal: +sub.toFixed(2),
-    delivery: recogerEnLocal ? 0 : +d.toFixed(2),
-    total: +total.toFixed(2),
-    estado: 'pendiente'
+    subtotal:    +sub.toFixed(2),
+    total:       +total.toFixed(2),
+
+    /* --- Items con AMBOS esquemas --- */
+    items: items.map(i => ({
+      /* Admin */
+      codigo_producto:        i.codigo,
+      nombre:                 i.nombre,
+      unidad:                 i.unidad,
+      cantidad:               i.qty,
+      precio_unitario:        i.precio,
+      precio_venta_congelado: i.precio,
+      precio_compra_estimado: 0,
+      subtotal_venta:         i.subtotal,
+      estado:                 'pendiente',
+      /* Compat cliente */
+      codigo:                 i.codigo,
+      qty:                    i.qty,
+      precio:                 i.precio,
+      subtotal:               i.subtotal
+    })),
+
+    fecha: serverTimestamp()
   };
 
   let firestoreOK = false;
@@ -1815,7 +1865,7 @@ async function confirmarPedido(){
 
     await setDoc(refPedido, payload, { merge: true });
     firestoreOK = true;
-    console.log('[Misti] ✓ Pedido guardado en rondas/' + ronda + '/pedidos/' + cliente.telefono);
+    console.log('[Misti] ✓ Pedido guardado en rondas/' + ronda + '/pedidos/' + pedidoId);
   } catch(e){
     firestoreErr = e;
     console.error('[Misti] ✗ Error Firestore:', e && e.code, e && e.message);
@@ -1823,22 +1873,16 @@ async function confirmarPedido(){
 
   if (!firestoreOK){
     const code = (firestoreErr && firestoreErr.code) || '';
-    let detalle = 'Error desconocido.';
+    let detalle = (firestoreErr && (firestoreErr.message || code)) || 'sin detalle';
     if (code === 'permission-denied'){
-      detalle = 'PERMISSION_DENIED — la ruta o el estado no coinciden con las reglas.';
+      detalle = 'PERMISSION_DENIED — revisa que las reglas permitan el estado "' + estadoInicial + '".';
     } else if (code === 'unavailable'){
       detalle = 'Firestore no disponible (revisa tu conexión).';
-    } else {
-      detalle = (firestoreErr && (firestoreErr.message || code)) || 'sin detalle';
     }
-    alert(
-      '⚠️ El pedido NO llegó al panel del admin.\n\n' +
-      detalle + '\n\n' +
-      'El mensaje de WhatsApp sí se enviará, pero avísale al admin.'
-    );
+    alert('⚠️ El pedido NO llegó al panel del admin.\n\n' + detalle + '\n\nEl mensaje de WhatsApp sí se enviará, avísale al admin.');
   }
 
-  // Navegar la pestaña que abrimos al inicio
+  /* Navegar la pestaña que abrimos al inicio */
   if (ventanaWA && !ventanaWA.closed){
     ventanaWA.location.href = url;
   } else {
@@ -1846,16 +1890,16 @@ async function confirmarPedido(){
   }
 
   try{
-    pedidos.unshift({ id: cliente.telefono, ronda, ...payload, fecha: new Date().toISOString(), _firestoreOK: firestoreOK });
+    pedidos.unshift({ id: pedidoId, ronda, ...payload, fecha: new Date().toISOString(), _firestoreOK: firestoreOK });
     pedidos = pedidos.slice(0, 30);
     guardar(LS_PEDIDOS, pedidos);
   }catch(e){}
 
   estadoPedido = {
-    estado: 'pendiente',
-    version: (estadoPedido.version || 0) + 1,
+    estado:   estadoInicial,
+    version:  (estadoPedido.version || 0) + 1,
     ronda,
-    fecha: new Date().toISOString(),
+    fecha:    new Date().toISOString(),
     telefono: cliente.telefono
   };
   guardar(LS_PEDIDO_ESTADO, estadoPedido);
@@ -1884,11 +1928,15 @@ function renderBannerPedido(){
   }
 
   const MENSAJES = {
-    pendiente: { clase: 'enviado',    msg: '<strong>Pedido enviado.</strong> Estamos revisando tu pedido; te confirmamos por WhatsApp.' },
-    aceptado:  { clase: 'confirmado', msg: '<strong>¡Pedido aceptado!</strong> Lo estamos preparando.' },
-    empacado:  { clase: 'confirmado', msg: '<strong>Tu pedido está empacado.</strong> Pronto saldrá a entrega.' },
-    entregado: { clase: 'confirmado', msg: '<strong>¡Pedido entregado!</strong> Gracias por tu compra.' },
-    fallido:   { clase: 'rechazado',  msg: '<strong>Pedido no confirmado.</strong> Escríbenos por WhatsApp para revisarlo.' }
+    pendiente_pago_yape:     { clase: 'enviado',    msg: '<strong>Pedido enviado (Yape).</strong> Estamos verificando tu pago.' },
+    pendiente_pago_efectivo: { clase: 'enviado',    msg: '<strong>Pedido enviado (efectivo).</strong> Estamos revisando tu pedido.' },
+    pendiente_pago_credito:  { clase: 'enviado',    msg: '<strong>Pedido enviado (crédito).</strong> Estamos revisando tu pedido.' },
+    pendiente:               { clase: 'enviado',    msg: '<strong>Pedido enviado.</strong> Estamos revisando tu pedido.' },
+    aceptado:                { clase: 'confirmado', msg: '<strong>¡Pedido aceptado!</strong> Lo estamos preparando.' },
+    empacado:                { clase: 'confirmado', msg: '<strong>Tu pedido está empacado.</strong> Pronto saldrá a entrega.' },
+    entregado:               { clase: 'confirmado', msg: '<strong>¡Pedido entregado!</strong> Gracias por tu compra.' },
+    fallido:                 { clase: 'rechazado',  msg: '<strong>Pedido no confirmado.</strong> Escríbenos por WhatsApp para revisarlo.' },
+    rechazado:               { clase: 'rechazado',  msg: '<strong>Pedido rechazado.</strong> Escríbenos por WhatsApp para revisarlo.' }
   };
 
   const info = MENSAJES[est] || { clase: 'enviado', msg: `<strong>Estado: ${escapar(est)}</strong>` };
@@ -1902,19 +1950,19 @@ function renderBannerPedido(){
 }
 
 /* ============================================================
-   FIREBASE — PRECIOS DE LA RONDA (subcolección) Y ESTADO DEL PEDIDO
+   FIREBASE — PRECIOS DE LA RONDA Y ESTADO DEL PEDIDO
    ============================================================ */
 
 function initFirebaseRonda(){
   rondaActivaId = getRondaId();
   try{
-    /* Lee la subcolección rondas/{ronda}/precios/{precio} que permiten las reglas */
+    /* Lee la subcolección rondas/{ronda}/precios/{precio} */
     unsubPrecios = onSnapshot(collection(fdb, 'rondas', rondaActivaId, 'precios'), snap => {
       let huboCambios = false;
       snap.forEach(d => {
         const data = d.data() || {};
-        const cod = data.codigo || d.id;
-        const n = Number(data.precio);
+        const cod = data.codigo || data.codigo_producto || d.id;
+        const n = Number(data.precio ?? data.P_L_final ?? data.P_L_mercado);
         const p = getProducto(cod);
         if (p && !isNaN(n) && n > 0 && p.precio !== n){
           p.precio = n;
@@ -1938,7 +1986,9 @@ function escucharPedido(){
 
   if (unsubPedido){ try{ unsubPedido(); }catch(e){} unsubPedido = null; }
 
-  const refPedido = doc(fdb, 'rondas', estadoPedido.ronda, 'pedidos', estadoPedido.telefono);
+  const pedidoId = `${estadoPedido.telefono}-${estadoPedido.ronda}`;
+  const refPedido = doc(fdb, 'rondas', estadoPedido.ronda, 'pedidos', pedidoId);
+
   try{
     unsubPedido = onSnapshot(refPedido, snap => {
       if (getRondaId() !== estadoPedido.ronda) return;
@@ -1977,7 +2027,7 @@ function init(){
     }
   }catch(e){}
 
-  /* 🔄 Auto-limpiar carrito si la ronda cambió */
+  /* Auto-limpiar carrito si la ronda cambió */
   const LS_RONDA_ACTUAL = 'misti_ronda_carrito';
   const rondaGuardada = localStorage.getItem(LS_RONDA_ACTUAL);
   const rondaHoy = getRondaId();

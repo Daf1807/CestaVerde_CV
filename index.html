@@ -61,13 +61,10 @@
   }
   .sello{display:inline-flex; align-items:center; gap:7px; font-family:var(--font-hand); font-weight:700; font-size:15px; letter-spacing:0.01em; padding:6px 12px; border-radius:var(--radio-full); border:2px solid var(--carbon); background:var(--miel-suave); color:var(--carbon); transform:rotate(-2deg); box-shadow:2px 2px 0 var(--carbon); white-space:nowrap; max-width:100%;}
   @media (min-width:640px){ .sello{font-size:17px; padding:6px 14px;} }
-  .hero{padding:18px 0 28px;}
+  .hero{padding:32px 0 28px;}
   @media (min-width:820px){ .hero{padding:72px 0 56px;} }
   .hero-grid{display:grid; grid-template-columns:1fr; gap:28px; align-items:center;}
   @media (min-width:900px){ .hero-grid{grid-template-columns:1.15fr 0.85fr; gap:56px;} }
-  .hero-verduras-band{display:grid; grid-template-columns:repeat(4, 1fr); gap:8px; margin-bottom:20px;}
-  @media (min-width:900px){ .hero-verduras-band{display:none;} }
-  .hero-verdura{aspect-ratio:1/1; border:2px solid var(--carbon); border-radius:var(--radio-sm); box-shadow:2px 2px 0 var(--carbon); background-color:var(--crema-2); background-image:url('Catalogo.png'); background-repeat:no-repeat; background-size:400% 700%; image-rendering:-webkit-optimize-contrast;}
   .hero-sello{margin-bottom:16px;}
   .hero h1{font-size:clamp(28px, 8vw, 54px); line-height:1.06; font-weight:800; color:var(--carbon); margin-bottom:18px; letter-spacing:-0.03em;}
   .hero h1 em{font-style:italic; font-weight:600; color:var(--rojo-aji); font-family:var(--font-display);}
@@ -134,12 +131,51 @@
   .productos-grid{display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:10px;}
   @media (min-width:520px){ .productos-grid{grid-template-columns:repeat(auto-fill, minmax(160px, 1fr)); gap:12px;} }
   @media (min-width:640px){ .productos-grid{grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:16px;} }
-  .producto{background:var(--crema); border:2px solid var(--carbon); border-radius:var(--radio); display:flex; flex-direction:column; transition:all .15s; box-shadow:2px 2px 0 var(--carbon); overflow:hidden; position:relative; min-width:0;}
-  .producto:hover{transform:translate(-2px,-2px); box-shadow:4px 4px 0 var(--carbon);}
-  .producto.en-carrito{background:var(--miel-suave); box-shadow:4px 4px 0 var(--rojo-aji);}
-  .producto-foto{width:100%; aspect-ratio:1/1; border-bottom:2px solid var(--carbon); background-color:var(--crema-2); background-image:url('Catalogo.png'); background-repeat:no-repeat; background-size:400% 700%; background-position:var(--bg-pos, 0% 0%); image-rendering:-webkit-optimize-contrast;}
-  .producto-contenido{padding:10px 10px 12px; display:flex; flex-direction:column; gap:6px; flex:1; min-width:0;}
-  @media (min-width:640px){ .producto-contenido{padding:14px 14px 16px; gap:8px;} }
+  
+  /* =========================================
+     DISEÑO LIMPIO PARA LA IMAGEN DE MADERA
+     ========================================= */
+  .producto {
+    background: var(--blanco); 
+    border: none; /* Sin bordes negros rígidos */
+    border-radius: var(--radio); 
+    display: flex; 
+    flex-direction: column; 
+    transition: all .2s ease; 
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08); /* Sombra suave moderna */
+    overflow: hidden; 
+    position: relative; 
+    min-width: 0;
+  }
+  .producto:hover{
+    transform: translateY(-2px); 
+    box-shadow: 0 8px 16px rgba(0,0,0,0.12);
+  }
+  .producto.en-carrito{
+    box-shadow: 0 0 0 2px var(--rojo-aji), 0 8px 16px rgba(199,57,43,0.2);
+  }
+  .producto-foto{
+    width:100%; 
+    aspect-ratio: 4 / 3; /* Proporción para que la madera llene todo */
+    border-bottom: none; 
+    background-color: transparent; 
+    background-image:url('Catálogo.png'); 
+    background-repeat:no-repeat; 
+    background-size:400% 700%; 
+    background-position:var(--bg-pos, 0% 0%); 
+    image-rendering:-webkit-optimize-contrast;
+  }
+  .producto-contenido{
+    padding: 12px 14px; 
+    display:flex; 
+    flex-direction:column; 
+    gap:6px; 
+    flex:1; 
+    min-width:0;
+    background: var(--blanco);
+  }
+  @media (min-width:640px){ .producto-contenido{padding:16px; gap:8px;} }
+  
   .producto-nombre{font-size:13px; font-weight:700; line-height:1.25; color:var(--carbon); word-break:break-word;}
   .producto-unidad{font-family:var(--font-hand); font-size:14px; color:var(--texto-suave); margin-top:-2px; font-weight:600;}
   .producto-precio{font-family:var(--font-display); font-size:18px; font-weight:800; color:var(--rojo-aji); line-height:1; letter-spacing:-0.02em; margin-top:auto;}
@@ -150,7 +186,7 @@
     .producto-precio{font-size:22px;} .producto-precio small{font-size:11.5px;}
     .producto-rango{font-size:11px;}
   }
-  .qty-wrap{display:flex; align-items:center; gap:6px; background:var(--blanco); border:2px solid var(--carbon); border-radius:var(--radio-sm); padding:5px 7px 5px 9px; transition:all .15s; min-width:0;}
+  .qty-wrap{display:flex; align-items:center; gap:6px; background:var(--blanco); border:2px solid var(--borde); border-radius:var(--radio-sm); padding:5px 7px 5px 9px; transition:all .15s; min-width:0;}
   @media (min-width:640px){ .qty-wrap{gap:8px; padding:6px 8px 6px 12px;} }
   .producto.en-carrito .qty-wrap{background:var(--blanco); border-color:var(--rojo-aji);}
   .qty-wrap label{font-size:9.5px; font-weight:700; color:var(--texto-suave); text-transform:uppercase; letter-spacing:0.05em; flex-shrink:0;}
@@ -449,19 +485,6 @@
 
 <header class="hero">
   <div class="wrap">
-
-    <!-- Banda de verduras: primera cosa que se ve en el celular -->
-    <div class="hero-verduras-band" aria-hidden="true">
-      <div class="hero-verdura" style="background-position:0% 0%"></div>
-      <div class="hero-verdura" style="background-position:100% 0%"></div>
-      <div class="hero-verdura" style="background-position:0% 16.66%"></div>
-      <div class="hero-verdura" style="background-position:33.33% 16.66%"></div>
-      <div class="hero-verdura" style="background-position:100% 16.66%"></div>
-      <div class="hero-verdura" style="background-position:66.66% 16.66%"></div>
-      <div class="hero-verdura" style="background-position:33.33% 33.33%"></div>
-      <div class="hero-verdura" style="background-position:0% 33.33%"></div>
-    </div>
-
     <div class="hero-grid">
       <div>
         <div class="hero-sello">
@@ -596,7 +619,6 @@
   </div>
 </section>
 
-<!-- ===== NUEVA SECCIÓN: TARIFAS DE DELIVERY ===== -->
 <section id="tarifas">
   <div class="wrap">
     <div class="section-head">
@@ -686,11 +708,6 @@
 </div>
 
 <script>
-/* ============================================================
-   PRODUCTOS
-   Nota: PR-017 (Ají Panca), PR-024 (Maíz Morado), PR-011 (Papa Huayro)
-   y PR-012 (Papa Negra Andina) fueron eliminados del catálogo.
-   ============================================================ */
 const PRODUCTOS = [
   { codigo:'PR-001', nombre:'Papa Amarilla',   grupo:'Básicos',             unidad:'kg',     precio:6.38,  bgPos:'0% 0%',           equiv_kg:1 },
   { codigo:'PR-002', nombre:'Papa Blanca',     grupo:'Básicos',             unidad:'kg',     precio:2.35,  bgPos:'33.33% 0%',       equiv_kg:1 },
@@ -728,7 +745,6 @@ const DESCRIPCION_GRUPOS = {
 
 const WHATSAPP_NEGOCIO = '51977101608';
 const MINIMO_COMPRA    = 20;
-// Comisión Yape desactivada. Cuando quieras activarla, cámbiala a 2.95 (o el % que definas).
 const COMISION_YAPE_PORC = 0;
 
 const CONFIG_DELIVERY = {
@@ -751,9 +767,6 @@ const CONFIG_DELIVERY = {
 const MISTI_LAT = -12.08729;
 const MISTI_LNG = -77.02179;
 
-/* ============================================================
-   RONDA
-   ============================================================ */
 function getRondaId(){
   const hoy = new Date();
   const dia = hoy.getDay();
@@ -821,9 +834,6 @@ function actualizarRelojRonda(){
   $('relojSeg').textContent   = String(ss).padStart(2,'0');
 }
 
-/* ============================================================
-   ESTADO LOCAL
-   ============================================================ */
 const DISTRITOS_LIMA = {
   'la victoria':'A','lince':'A','breña':'A','cercado de lima':'A','cercado':'A',
   'jesús maría':'B','jesus maria':'B','san isidro':'B','miraflores':'B','surquillo':'B','san borja':'B',
@@ -970,9 +980,6 @@ function validarReferencia(v){
 }
 function validarCalle(){ return !!(cliente.calle && cliente.lat != null && cliente.lng != null); }
 
-/* ============================================================
-   GEO / NOMINATIM
-   ============================================================ */
 async function buscarDireccion(q){
   mostrarEstadoBusqueda('loading');
   try {
@@ -1150,9 +1157,6 @@ async function actualizarCoordsDesdePin(lat, lng){
   actualizarBotonConfirmar();
 }
 
-/* ============================================================
-   UI DEL CATÁLOGO
-   ============================================================ */
 function renderCatalogo(){
   const cont = $('catalogoCont');
   if (!cont) return;
@@ -1253,9 +1257,6 @@ function renderCartBar(){
   $('cartBar').classList.toggle('visible', count > 0);
 }
 
-/* ============================================================
-   DRAWER
-   ============================================================ */
 function abrirDrawer(){
   $('drawer').classList.add('open');
   document.body.style.overflow = 'hidden';
@@ -1281,7 +1282,6 @@ function renderDrawer(){
     return;
   }
 
-  // Items
   let html = `<div style="margin-bottom:6px; font-size:11px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:var(--texto-muy-suave);">Productos (${items.length})</div>`;
   html += items.map(i => `
     <div class="cart-item">
@@ -1295,7 +1295,6 @@ function renderDrawer(){
       </div>
     </div>`).join('');
 
-  // Cliente
   html += `<div style="margin-top:22px; margin-bottom:10px; font-size:11px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:var(--texto-muy-suave);">Tus datos</div>`;
   html += `<div class="campo">
     <label>Nombre completo <span class="req">*</span></label>
@@ -1306,7 +1305,6 @@ function renderDrawer(){
     <input id="inpTelefono" type="tel" inputmode="numeric" maxlength="9" value="${escapar(cliente.telefono)}" placeholder="9 dígitos" autocomplete="tel">
   </div>`;
 
-  // Entrega
   html += `<div style="margin-top:6px; margin-bottom:10px; font-size:11px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:var(--texto-muy-suave);">Entrega</div>`;
   html += `
     <label class="check-recojo ${recogerEnLocal ? 'activo' : ''}" id="checkRecojoWrap">
@@ -1355,7 +1353,6 @@ function renderDrawer(){
     html += `<div class="zona-info" id="zonaInfo"></div>`;
   }
 
-  // Pago
   html += `<div style="margin-top:6px; margin-bottom:10px; font-size:11px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:var(--texto-muy-suave);">Método de pago</div>`;
   html += `
     <div class="metodo-pago">
@@ -1369,13 +1366,11 @@ function renderDrawer(){
       </label>
     </div>`;
 
-  // Resumen y boleta
   html += renderResumenHTML();
   html += `<div class="boleta" id="boleta"></div>`;
 
   body.innerHTML = html;
 
-  // Foot
   foot.innerHTML = `
     <button class="btn btn-primary btn-block" id="btnConfirmar" disabled>Confirmar pedido por WhatsApp</button>
     <div style="font-size:11.5px; color:var(--texto-suave); text-align:center; margin-top:8px;">Mínimo de compra: S/ ${MINIMO_COMPRA}. Te contactaremos por WhatsApp para coordinar el pago.</div>`;
@@ -1452,7 +1447,6 @@ function bindDrawerInputs(){
   const btnConf = $('btnConfirmar');
   if (btnConf) btnConf.addEventListener('click', enviarPedidoWhatsApp);
 
-  // Items +/-/eliminar
   document.querySelectorAll('[data-mas]').forEach(b => b.addEventListener('click', () => cambiarQty(b.dataset.mas, +1)));
   document.querySelectorAll('[data-menos]').forEach(b => b.addEventListener('click', () => cambiarQty(b.dataset.menos, -1)));
   document.querySelectorAll('[data-del]').forEach(b => b.addEventListener('click', () => {
@@ -1644,9 +1638,6 @@ function actualizarBoleta(){
     </div>`;
 }
 
-/* ============================================================
-   ENVÍO POR WHATSAPP
-   ============================================================ */
 function enviarPedidoWhatsApp(){
   const items = itemsCarrito();
   if (items.length === 0) return;
@@ -1684,7 +1675,6 @@ function enviarPedidoWhatsApp(){
 
   const url = `https://wa.me/${WHATSAPP_NEGOCIO}?text=${encodeURIComponent(msg)}`;
 
-  // Guardar pedido local
   pedidos.push({
     ronda,
     fecha: new Date().toISOString(),
@@ -1699,29 +1689,19 @@ function enviarPedidoWhatsApp(){
   window.open(url, '_blank');
 }
 
-/* ============================================================
-   INICIALIZACIÓN
-   ============================================================ */
 document.addEventListener('DOMContentLoaded', () => {
-  // Ronda IDs
   document.querySelectorAll('.rondaId').forEach(el => el.textContent = getRondaId());
-
-  // Catálogo
   renderCatalogo();
   renderCartBar();
-
-  // Reloj
   actualizarRelojRonda();
   setInterval(actualizarRelojRonda, 1000);
 
-  // Cart bar
   const cartBar = $('cartBar');
   cartBar.addEventListener('click', abrirDrawer);
   cartBar.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); abrirDrawer(); }
   });
 
-  // Drawer close
   $('drawerClose').addEventListener('click', cerrarDrawer);
   $('drawerOverlay').addEventListener('click', cerrarDrawer);
   document.addEventListener('keydown', (e) => {

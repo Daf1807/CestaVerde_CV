@@ -132,9 +132,7 @@
   @media (min-width:520px){ .productos-grid{grid-template-columns:repeat(auto-fill, minmax(160px, 1fr)); gap:12px;} }
   @media (min-width:640px){ .productos-grid{grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:16px;} }
   
-  /* =========================================
-     ESTILOS ORIGINALES RESTAURADOS Y ALINEACIÓN PERFECTA
-     ========================================= */
+  /* ESTILOS RESTAURADOS Y ALINEACIÓN PERFECTA */
   .producto {
     background: var(--crema);
     border: 2px solid var(--carbon);
@@ -157,10 +155,9 @@
   }
   .producto-foto {
     width: 100%;
-    /* Proporción exacta de las celdas de tu imagen (1024/4 x 1533/7) */
     aspect-ratio: 256 / 219; 
     border-bottom: 2px solid var(--carbon);
-    background-color: transparent;
+    background-color: var(--crema-2);
     background-image: url('Catálogo.png');
     background-repeat: no-repeat;
     background-size: 400% 700%;

@@ -134,7 +134,7 @@
   
   /* =========================================================
      TARJETAS DE PRODUCTO CON DISEÑO ORIGINAL RESTAURADO 
-     Y PROPORCIÓN MATEMÁTICA EXACTA (256 x 219.43)
+     Y PROPORCIÓN MATEMÁTICA EXACTA PARA CADA RECORTE
      ========================================================= */
   .producto {
     background: var(--crema);
@@ -158,14 +158,14 @@
   }
   .producto-foto {
     width: 100%;
-    /* Proporción exacta de las celdas de tu imagen */
-    aspect-ratio: 256 / 219.43; 
+    aspect-ratio: 1 / 1; /* Forzamos un cuadrado para que la grilla sea perfecta */
     border-bottom: 2px solid var(--carbon);
     background-color: var(--crema-2);
     background-image: url('Catálogo.png');
     background-repeat: no-repeat;
-    background-size: 400% 700%;
-    background-position: var(--bg-pos, 0% 0%);
+    /* Aquí usamos las variables calculadas matemáticamente */
+    background-size: var(--bg-size);
+    background-position: var(--bg-pos);
     image-rendering: -webkit-optimize-contrast;
   }
   .producto-contenido {
@@ -201,7 +201,6 @@
   .qty-wrap .unit{font-size:11.5px; font-weight:700; color:var(--texto-suave); flex-shrink:0; padding-right:2px; font-family:var(--font-hand);}
   @media (min-width:640px){ .qty-wrap .unit{font-size:12.5px;} }
   .qty-input:disabled{opacity:.5; cursor:not-allowed;}
-  
   #donde{background:var(--crema-2); border-top:2px solid var(--carbon); border-bottom:2px solid var(--carbon);}
   .donde-grid{display:grid; grid-template-columns:1fr; gap:24px;}
   @media (min-width:820px){ .donde-grid{grid-template-columns:1fr 1fr; gap:56px;} }
@@ -213,7 +212,6 @@
   @media (min-width:480px){ .donde-info .linea b{width:90px; font-size:20px;} }
   .donde-info .linea span{font-size:14px; color:var(--texto); line-height:1.55;}
   .donde-info .linea span strong{color:var(--carbon); font-weight:700;}
-  
   #tarifas{background:var(--blanco); border-top:2px solid var(--carbon); border-bottom:2px solid var(--carbon);}
   .tarifas-grid{display:grid; grid-template-columns:1fr; gap:16px;}
   @media (min-width:720px){ .tarifas-grid{grid-template-columns:1fr 1fr; gap:24px;} }
@@ -226,7 +224,6 @@
   .tarifa-lista .precio{font-family:var(--font-display); font-weight:800; color:var(--rojo-aji); white-space:nowrap; letter-spacing:-0.02em;}
   .tarifas-nota{margin-top:18px; background:var(--miel-suave); border:2px solid var(--carbon); border-radius:var(--radio); padding:14px 16px; font-size:13px; color:var(--carbon); line-height:1.55; box-shadow:3px 3px 0 var(--carbon);}
   .tarifas-nota strong{font-weight:800;}
-  
   #cierre{padding:48px 0; background:var(--crema-2); border-top:2px solid var(--carbon);}
   @media (min-width:640px){ #cierre{padding:60px 0;} }
   .cierre-card{background:var(--carbon); color:var(--crema); border-radius:var(--radio-lg); padding:32px 20px; text-align:center; border:3px solid var(--carbon); box-shadow:6px 6px 0 var(--rojo-aji); position:relative; overflow:hidden;}
@@ -243,7 +240,6 @@
   .cierre-card .btn-primary:hover{background:var(--miel-suave); transform:translate(-1px,-1px); box-shadow:4px 4px 0 var(--rojo-aji);}
   .cierre-card .btn-secondary{background:transparent; color:var(--crema); border-color:var(--crema); box-shadow:3px 3px 0 var(--crema);}
   .cierre-card .btn-secondary:hover{background:var(--crema); color:var(--carbon);}
-  
   footer{background:var(--crema-2); border-top:2px solid var(--carbon); padding:40px 0 24px;}
   @media (min-width:640px){ footer{padding:52px 0 28px;} }
   .footer-grid{display:grid; grid-template-columns:1fr; gap:26px; margin-bottom:30px;}
@@ -257,7 +253,6 @@
   footer ul li a:hover{color:var(--rojo-aji);}
   .footer-bottom{border-top:1px dashed var(--borde-fuerte); padding-top:18px; font-size:12px; color:var(--texto-suave);}
   @media (min-width:640px){ .footer-bottom{padding-top:22px;} }
-  
   .cart-bar{position:fixed; left:10px; right:10px; bottom:10px; z-index:80; background:var(--carbon); color:var(--crema); border-radius:var(--radio-full); padding:10px 10px 10px 16px; display:flex; align-items:center; justify-content:space-between; gap:8px; box-shadow:4px 4px 0 var(--rojo-aji); transform:translateY(180%); transition:transform .28s cubic-bezier(.2,.9,.3,1); cursor:pointer; max-width:520px; margin:0 auto; border:2px solid var(--carbon); min-width:0;}
   @media (min-width:820px){ .cart-bar{left:auto; right:26px; bottom:26px; width:auto; min-width:380px; margin:0; padding:12px 14px 12px 20px; gap:12px; box-shadow:5px 5px 0 var(--rojo-aji);} }
   .cart-bar.visible{transform:translateY(0);}
@@ -269,7 +264,6 @@
   @media (min-width:640px){ .cart-bar-total{font-size:15px;} }
   .cart-bar-cta{background:var(--rojo-aji); color:#fff; padding:8px 14px; border-radius:var(--radio-full); font-size:12.5px; font-weight:700; white-space:nowrap; border:2px solid var(--carbon); flex-shrink:0;}
   @media (min-width:640px){ .cart-bar-cta{padding:9px 18px; font-size:13px;} }
-  
   .drawer{position:fixed; inset:0; z-index:100; display:none;}
   .drawer.open{display:block;}
   .drawer-overlay{position:absolute; inset:0; background:rgba(43,24,16,0.5); backdrop-filter:blur(3px); animation:fadeIn .2s ease;}
@@ -719,30 +713,30 @@
 
 <script>
 const PRODUCTOS = [
-  { codigo:'PR-001', nombre:'Papa Amarilla',   grupo:'Básicos',             unidad:'kg',     precio:6.38,  bgPos:'0% 0%',           equiv_kg:1 },
-  { codigo:'PR-002', nombre:'Papa Blanca',     grupo:'Básicos',             unidad:'kg',     precio:2.35,  bgPos:'33.333% 0%',      equiv_kg:1 },
-  { codigo:'PR-003', nombre:'Papa Canchán',    grupo:'Básicos',             unidad:'kg',     precio:3.58,  bgPos:'66.666% 0%',      equiv_kg:1 },
-  { codigo:'PR-004', nombre:'Tomate Katia',    grupo:'Básicos',             unidad:'kg',     precio:6.90,  bgPos:'100% 0%',         equiv_kg:1 },
-  { codigo:'PR-005', nombre:'Cebolla Roja',    grupo:'Básicos',             unidad:'kg',     precio:3.85,  bgPos:'0% 16.666%',      equiv_kg:1 },
-  { codigo:'PR-006', nombre:'Zanahoria',       grupo:'Básicos',             unidad:'kg',     precio:6.90,  bgPos:'33.333% 16.666%', equiv_kg:1 },
-  { codigo:'PR-007', nombre:'Choclo Serrano',  grupo:'Básicos',             unidad:'unidad', precio:3.63,  bgPos:'66.666% 16.666%', equiv_kg:0.5 },
-  { codigo:'PR-008', nombre:'Camote Amarillo', grupo:'Básicos',             unidad:'kg',     precio:1.61,  bgPos:'100% 16.666%',    equiv_kg:1 },
-  { codigo:'PR-009', nombre:'Yuca Amarilla',   grupo:'Básicos',             unidad:'kg',     precio:2.81,  bgPos:'0% 33.333%',      equiv_kg:1 },
-  { codigo:'PR-010', nombre:'Zapallo Macre',   grupo:'Básicos',             unidad:'kg',     precio:4.90,  bgPos:'33.333% 33.333%', equiv_kg:1 },
-  { codigo:'PR-013', nombre:'Cebolla China',   grupo:'Sazón y Aderezos',    unidad:'atado',  precio:1.00,  bgPos:'0% 50%',          equiv_kg:0.5 },
-  { codigo:'PR-014', nombre:'Ajo Criollo',     grupo:'Sazón y Aderezos',    unidad:'kg',     precio:6.15,  bgPos:'33.333% 50%',     equiv_kg:1 },
-  { codigo:'PR-015', nombre:'Kion',            grupo:'Sazón y Aderezos',    unidad:'kg',     precio:5.89,  bgPos:'66.666% 50%',     equiv_kg:1 },
-  { codigo:'PR-016', nombre:'Ají Amarillo',    grupo:'Sazón y Aderezos',    unidad:'kg',     precio:11.90, bgPos:'100% 50%',        equiv_kg:1 },
-  { codigo:'PR-018', nombre:'Ají Rocoto',      grupo:'Sazón y Aderezos',    unidad:'kg',     precio:11.90, bgPos:'33.333% 66.666%', equiv_kg:1 },
-  { codigo:'PR-019', nombre:'Huacatay',        grupo:'Sazón y Aderezos',    unidad:'atado',  precio:1.00,  bgPos:'66.666% 66.666%', equiv_kg:0.5 },
-  { codigo:'PR-020', nombre:'Culantro',        grupo:'Hierbas y Aromáticos',unidad:'atado',  precio:1.00,  bgPos:'100% 66.666%',    equiv_kg:0.5 },
-  { codigo:'PR-021', nombre:'Perejil',         grupo:'Hierbas y Aromáticos',unidad:'atado',  precio:1.00,  bgPos:'0% 83.333%',      equiv_kg:0.5 },
-  { codigo:'PR-022', nombre:'Apio',            grupo:'Especial',            unidad:'atado',  precio:4.00,  bgPos:'33.333% 83.333%', equiv_kg:0.5 },
-  { codigo:'PR-023', nombre:'Poro',            grupo:'Especial',            unidad:'unidad', precio:2.99,  bgPos:'66.666% 83.333%', equiv_kg:0.5 },
-  { codigo:'PR-025', nombre:'Ají Escabeche',   grupo:'Especial',            unidad:'kg',     precio:8.08,  bgPos:'0% 100%',         equiv_kg:1 },
-  { codigo:'PR-026', nombre:'Limón Cítrico',   grupo:'Especial',            unidad:'kg',     precio:5.90,  bgPos:'33.333% 100%',    equiv_kg:1 },
-  { codigo:'PR-027', nombre:'Vainita',         grupo:'Especial',            unidad:'kg',     precio:10.33, bgPos:'66.666% 100%',    equiv_kg:1 },
-  { codigo:'PR-028', nombre:'Zapallo Loche',   grupo:'Especial',            unidad:'unidad', precio:22.31, bgPos:'100% 100%',       equiv_kg:2 }
+  { codigo:'PR-001', nombre:'Papa Amarilla',   grupo:'Básicos',             unidad:'kg',     precio:6.38,  bgSize:'417.96% 808.42%', bgPos:'1.28% 0.74%', equiv_kg:1 },
+  { codigo:'PR-002', nombre:'Papa Blanca',     grupo:'Básicos',             unidad:'kg',     precio:2.35,  bgSize:'417.96% 808.42%', bgPos:'33.38% 0.74%', equiv_kg:1 },
+  { codigo:'PR-003', nombre:'Papa Canchán',    grupo:'Básicos',             unidad:'kg',     precio:3.58,  bgSize:'426.67% 808.42%', bgPos:'66.33% 0.74%', equiv_kg:1 },
+  { codigo:'PR-004', nombre:'Tomate Katia',    grupo:'Básicos',             unidad:'kg',     precio:6.90,  bgSize:'445.22% 787.69%', bgPos:'98.87% 0.37%', equiv_kg:1 },
+  { codigo:'PR-005', nombre:'Cebolla Roja',    grupo:'Básicos',             unidad:'kg',     precio:3.85,  bgSize:'417.96% 830.27%', bgPos:'1.28% 15.91%', equiv_kg:1 },
+  { codigo:'PR-006', nombre:'Zanahoria',       grupo:'Básicos',             unidad:'kg',     precio:6.90,  bgSize:'401.57% 749.27%', bgPos:'33.16% 15.03%', equiv_kg:1 },
+  { codigo:'PR-007', nombre:'Choclo Serrano',  grupo:'Básicos',             unidad:'unidad', precio:3.63,  bgSize:'393.85% 830.27%', bgPos:'66.75% 15.54%', equiv_kg:0.5 },
+  { codigo:'PR-008', nombre:'Camote Amarillo', grupo:'Básicos',             unidad:'kg',     precio:1.61,  bgSize:'426.67% 787.69%', bgPos:'98.85% 15.66%', equiv_kg:1 },
+  { codigo:'PR-009', nombre:'Yuca Amarilla',   grupo:'Básicos',             unidad:'kg',     precio:2.81,  bgSize:'409.60% 768.00%', bgPos:'1.29% 31.06%', equiv_kg:1 },
+  { codigo:'PR-010', nombre:'Zapallo Macre',   grupo:'Básicos',             unidad:'kg',     precio:4.90,  bgSize:'386.42% 749.27%', bgPos:'33.60% 30.80%', equiv_kg:1 },
+  { codigo:'PR-013', nombre:'Cebolla China',   grupo:'Sazón y Aderezos',    unidad:'atado',  precio:1.00,  bgSize:'386.42% 768.00%', bgPos:'0.66% 45.28%', equiv_kg:0.5 },
+  { codigo:'PR-014', nombre:'Ajo Criollo',     grupo:'Sazón y Aderezos',    unidad:'kg',     precio:6.15,  bgSize:'435.74% 930.91%', bgPos:'34.85% 45.95%', equiv_kg:1 },
+  { codigo:'PR-015', nombre:'Kion',            grupo:'Sazón y Aderezos',    unidad:'kg',     precio:5.89,  bgSize:'393.85% 853.33%', bgPos:'67.41% 45.72%', equiv_kg:1 },
+  { codigo:'PR-016', nombre:'Ají Amarillo',    grupo:'Sazón y Aderezos',    unidad:'kg',     precio:11.90, bgSize:'426.67% 853.33%', bgPos:'98.85% 45.72%', equiv_kg:1 },
+  { codigo:'PR-018', nombre:'Ají Rocoto',      grupo:'Sazón y Aderezos',    unidad:'kg',     precio:11.90, bgSize:'435.74% 830.27%', bgPos:'34.85% 59.59%', equiv_kg:1 },
+  { codigo:'PR-019', nombre:'Huacatay',        grupo:'Sazón y Aderezos',    unidad:'atado',  precio:1.00,  bgSize:'393.85% 787.69%', bgPos:'67.41% 59.66%', equiv_kg:0.5 },
+  { codigo:'PR-020', nombre:'Culantro',        grupo:'Hierbas y Aromáticos',unidad:'atado',  precio:1.00,  bgSize:'426.67% 808.42%', bgPos:'98.85% 59.44%', equiv_kg:0.5 },
+  { codigo:'PR-021', nombre:'Perejil',         grupo:'Hierbas y Aromáticos',unidad:'atado',  precio:1.00,  bgSize:'401.57% 698.18%', bgPos:'1.30% 75.61%', equiv_kg:0.5 },
+  { codigo:'PR-022', nombre:'Apio',            grupo:'Especial',            unidad:'atado',  precio:4.00,  bgSize:'393.85% 667.83%', bgPos:'33.38% 75.42%', equiv_kg:0.5 },
+  { codigo:'PR-023', nombre:'Poro',            grupo:'Especial',            unidad:'unidad', precio:2.99,  bgSize:'393.85% 653.62%', bgPos:'67.41% 75.71%', equiv_kg:0.5 },
+  { codigo:'PR-025', nombre:'Ají Escabeche',   grupo:'Especial',            unidad:'kg',     precio:8.08,  bgSize:'401.57% 808.42%', bgPos:'1.30% 91.38%', equiv_kg:1 },
+  { codigo:'PR-026', nombre:'Limón Cítrico',   grupo:'Especial',            unidad:'kg',     precio:5.90,  bgSize:'409.60% 768.00%', bgPos:'34.24% 91.32%', equiv_kg:1 },
+  { codigo:'PR-027', nombre:'Vainita',         grupo:'Especial',            unidad:'kg',     precio:10.33, bgSize:'393.85% 749.27%', bgPos:'67.41% 92.04%', equiv_kg:1 },
+  { codigo:'PR-028', nombre:'Zapallo Loche',   grupo:'Especial',            unidad:'unidad', precio:22.31, bgSize:'426.67% 749.27%', bgPos:'98.85% 91.66%', equiv_kg:2 }
 ];
 
 const ORDEN_GRUPOS = ['Básicos','Sazón y Aderezos','Hierbas y Aromáticos','Especial'];
@@ -1187,7 +1181,7 @@ function renderCatalogo(){
     grupos[g].forEach(p => {
       const qty = (carrito[p.codigo] && carrito[p.codigo].qty) || 0;
       const enCarrito = qty > 0;
-      const fotoStyle = `--bg-pos:${p.bgPos || '0% 0%'};`;
+      const fotoStyle = `--bg-size:${p.bgSize}; --bg-pos:${p.bgPos};`;
       const rangoTxt = (p.unidad === 'kg') ? 'Rango: 0.9 – 1.1 kg' : '';
       html += `
         <div class="producto ${enCarrito ? 'en-carrito' : ''}" data-codigo="${p.codigo}">

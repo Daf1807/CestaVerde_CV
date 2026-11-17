@@ -679,6 +679,11 @@ function pedidoBloqueado(){
       && estadoPedido.ronda === getRondaId();
 }
 
+/* ============================================================
+   IMPORTANTE: equiv_kg es solo un valor inicial (fallback).
+   En cuanto Firestore responde, se sobrescribe con el valor real
+   que viene en rondas/{ronda}/precios/{codigo}.equiv_kg.
+   ============================================================ */
 const PRODUCTOS = [
   { codigo:'PR-001', nombre:'Papa Amarilla',   grupo:'Básicos',             unidad:'kg',     precio:6.38,  bgSize:'417.96% 808.42%', bgPos:'1.28% 0.74%', equiv_kg:1 },
   { codigo:'PR-002', nombre:'Papa Blanca',     grupo:'Básicos',             unidad:'kg',     precio:2.35,  bgSize:'417.96% 808.42%', bgPos:'33.38% 0.74%', equiv_kg:1 },
@@ -686,24 +691,24 @@ const PRODUCTOS = [
   { codigo:'PR-004', nombre:'Tomate Katia',    grupo:'Básicos',             unidad:'kg',     precio:6.90,  bgSize:'445.22% 787.69%', bgPos:'98.87% 0.37%', equiv_kg:1 },
   { codigo:'PR-005', nombre:'Cebolla Roja',    grupo:'Básicos',             unidad:'kg',     precio:3.85,  bgSize:'417.96% 830.27%', bgPos:'1.28% 15.91%', equiv_kg:1 },
   { codigo:'PR-006', nombre:'Zanahoria',       grupo:'Básicos',             unidad:'kg',     precio:6.90,  bgSize:'401.57% 749.27%', bgPos:'33.16% 15.03%', equiv_kg:1 },
-  { codigo:'PR-007', nombre:'Choclo Serrano',  grupo:'Básicos',             unidad:'unidad', precio:3.63,  bgSize:'393.85% 830.27%', bgPos:'66.75% 15.54%', equiv_kg:0.5 },
+  { codigo:'PR-007', nombre:'Choclo Serrano',  grupo:'Básicos',             unidad:'unidad', precio:3.63,  bgSize:'393.85% 830.27%', bgPos:'66.75% 15.54%', equiv_kg:0.42 },
   { codigo:'PR-008', nombre:'Camote Amarillo', grupo:'Básicos',             unidad:'kg',     precio:1.61,  bgSize:'426.67% 787.69%', bgPos:'98.85% 15.66%', equiv_kg:1 },
   { codigo:'PR-009', nombre:'Yuca Amarilla',   grupo:'Básicos',             unidad:'kg',     precio:2.81,  bgSize:'409.60% 768.00%', bgPos:'1.29% 31.06%', equiv_kg:1 },
   { codigo:'PR-010', nombre:'Zapallo Macre',   grupo:'Básicos',             unidad:'kg',     precio:4.90,  bgSize:'386.42% 749.27%', bgPos:'33.60% 30.80%', equiv_kg:1 },
-  { codigo:'PR-013', nombre:'Cebolla China',   grupo:'Sazón y Aderezos',    unidad:'atado',  precio:1.00,  bgSize:'386.42% 768.00%', bgPos:'0.66% 45.28%', equiv_kg:0.5 },
+  { codigo:'PR-013', nombre:'Cebolla China',   grupo:'Sazón y Aderezos',    unidad:'atado',  precio:1.00,  bgSize:'386.42% 768.00%', bgPos:'0.66% 45.28%', equiv_kg:0.1 },
   { codigo:'PR-014', nombre:'Ajo Criollo',     grupo:'Sazón y Aderezos',    unidad:'kg',     precio:6.15,  bgSize:'435.74% 930.91%', bgPos:'34.85% 45.95%', equiv_kg:1 },
   { codigo:'PR-015', nombre:'Kion',            grupo:'Sazón y Aderezos',    unidad:'kg',     precio:5.89,  bgSize:'393.85% 853.33%', bgPos:'67.41% 45.72%', equiv_kg:1 },
   { codigo:'PR-016', nombre:'Ají Amarillo',    grupo:'Sazón y Aderezos',    unidad:'kg',     precio:11.90, bgSize:'426.67% 853.33%', bgPos:'98.85% 45.72%', equiv_kg:1 },
   { codigo:'PR-018', nombre:'Ají Rocoto',      grupo:'Sazón y Aderezos',    unidad:'kg',     precio:11.90, bgSize:'435.74% 830.27%', bgPos:'34.85% 59.59%', equiv_kg:1 },
-  { codigo:'PR-019', nombre:'Huacatay',        grupo:'Sazón y Aderezos',    unidad:'atado',  precio:1.00,  bgSize:'393.85% 787.69%', bgPos:'67.41% 59.66%', equiv_kg:0.5 },
-  { codigo:'PR-020', nombre:'Culantro',        grupo:'Hierbas y Aromáticos',unidad:'atado',  precio:1.00,  bgSize:'426.67% 808.42%', bgPos:'98.85% 59.44%', equiv_kg:0.5 },
-  { codigo:'PR-021', nombre:'Perejil',         grupo:'Hierbas y Aromáticos',unidad:'atado',  precio:1.00,  bgSize:'401.57% 698.18%', bgPos:'1.30% 75.61%', equiv_kg:0.5 },
-  { codigo:'PR-022', nombre:'Apio',            grupo:'Especial',            unidad:'atado',  precio:4.00,  bgSize:'393.85% 667.83%', bgPos:'33.38% 75.42%', equiv_kg:0.5 },
-  { codigo:'PR-023', nombre:'Poro',            grupo:'Especial',            unidad:'unidad', precio:2.99,  bgSize:'393.85% 653.62%', bgPos:'67.41% 75.71%', equiv_kg:0.5 },
+  { codigo:'PR-019', nombre:'Huacatay',        grupo:'Sazón y Aderezos',    unidad:'atado',  precio:1.00,  bgSize:'393.85% 787.69%', bgPos:'67.41% 59.66%', equiv_kg:0.1 },
+  { codigo:'PR-020', nombre:'Culantro',        grupo:'Hierbas y Aromáticos',unidad:'atado',  precio:1.00,  bgSize:'426.67% 808.42%', bgPos:'98.85% 59.44%', equiv_kg:0.15 },
+  { codigo:'PR-021', nombre:'Perejil',         grupo:'Hierbas y Aromáticos',unidad:'atado',  precio:1.00,  bgSize:'401.57% 698.18%', bgPos:'1.30% 75.61%', equiv_kg:0.1 },
+  { codigo:'PR-022', nombre:'Apio',            grupo:'Especial',            unidad:'atado',  precio:4.00,  bgSize:'393.85% 667.83%', bgPos:'33.38% 75.42%', equiv_kg:0.3 },
+  { codigo:'PR-023', nombre:'Poro',            grupo:'Especial',            unidad:'unidad', precio:2.99,  bgSize:'393.85% 653.62%', bgPos:'67.41% 75.71%', equiv_kg:0.26 },
   { codigo:'PR-025', nombre:'Ají Escabeche',   grupo:'Especial',            unidad:'kg',     precio:8.08,  bgSize:'401.57% 808.42%', bgPos:'1.30% 91.38%', equiv_kg:1 },
   { codigo:'PR-026', nombre:'Limón Cítrico',   grupo:'Especial',            unidad:'kg',     precio:5.90,  bgSize:'409.60% 768.00%', bgPos:'34.24% 91.32%', equiv_kg:1 },
   { codigo:'PR-027', nombre:'Vainita',         grupo:'Especial',            unidad:'kg',     precio:10.33, bgSize:'393.85% 749.27%', bgPos:'67.41% 92.04%', equiv_kg:1 },
-  { codigo:'PR-028', nombre:'Zapallo Loche',   grupo:'Especial',            unidad:'unidad', precio:22.31, bgSize:'426.67% 749.27%', bgPos:'98.85% 91.66%', equiv_kg:2 }
+  { codigo:'PR-028', nombre:'Zapallo Loche',   grupo:'Especial',            unidad:'unidad', precio:22.31, bgSize:'426.67% 749.27%', bgPos:'98.85% 91.66%', equiv_kg:1.5 }
 ];
 
 const ORDEN_GRUPOS = ['Básicos','Sazón y Aderezos','Hierbas y Aromáticos','Especial'];
@@ -1998,10 +2003,14 @@ function renderBannerPedido(){
 }
 
 /* ============================================================
-   FIREBASE — PRECIOS DE LA RONDA (CON PARCHE DEFENSIVO)
-   El admin guarda P_L_final en S/ por unidad de venta.
-   Si por alguna razón viene en S//kg (bug de versiones viejas),
-   lo detectamos y convertimos a S/ por unidad de venta.
+   FIREBASE — PRECIOS DE LA RONDA
+   El cliente toma TODOS los datos de Firestore:
+     - P_L_final  (S/ por unidad de venta, lo correcto del admin)
+     - equiv_kg   (peso real de la unidad, lo define el admin)
+   Si P_L_final viene en S//kg (bug de versiones viejas del admin),
+   lo detectamos y convertimos usando el equiv_kg de Firestore.
+   El array PRODUCTOS es solo un fallback inicial (mientras
+   Firestore responde por primera vez).
    ============================================================ */
 function initFirebaseRonda(){
   rondaActivaId = getRondaId();
@@ -2014,8 +2023,21 @@ function initFirebaseRonda(){
         const p = getProducto(cod);
         if (!p) return;
 
-        // P_L_final viene en S/ por unidad de venta (lo correcto del admin)
-        const plFinal  = Number(data.P_L_final);
+        // ------------------------------------------------------------
+        // 1) SINCRONIZAR equiv_kg DESDE FIRESTORE (fuente de verdad)
+        // ------------------------------------------------------------
+        const eqFs = Number(data.equiv_kg);
+        if (!isNaN(eqFs) && eqFs > 0 && p.equiv_kg !== eqFs){
+          p.equiv_kg = eqFs;
+          huboCambios = true;
+        }
+
+        // ------------------------------------------------------------
+        // 2) SINCRONIZAR PRECIO DESDE FIRESTORE
+        // P_L_final viene en S/ por unidad de venta (correcto del admin).
+        // Si viene en S//kg (bug viejo), convertimos con equiv_kg de Firestore.
+        // ------------------------------------------------------------
+        const plFinal   = Number(data.P_L_final);
         const plMercado = Number(data.P_L_mercado);
 
         let precioFinal = null;
@@ -2025,16 +2047,14 @@ function initFirebaseRonda(){
           precioFinal = plMercado;
         }
 
-        // Sanity check: si el precio es > 5x el P_L_mercado y el producto tiene
-        // equiv_kg < 1 (atadito, unidad), asumimos que viene en S//kg y lo
-        // convertimos a S/ por unidad de venta.
         if (precioFinal != null && !isNaN(plMercado) && plMercado > 0){
-          const eq = Number(p.equiv_kg) || 1;
+          const eq = p.equiv_kg || 1;
           if (precioFinal > plMercado * 5 && eq < 1){
             const precioConvertido = +(precioFinal * eq).toFixed(2);
             console.warn(
               '[MUYUYU] Precio corregido para ' + cod + ': ' +
-              plFinal + ' S//kg → ' + precioConvertido + ' S/' + p.unidad
+              plFinal + ' S//kg → ' + precioConvertido + ' S/' + p.unidad +
+              ' (equiv_kg=' + eq + ' desde Firestore)'
             );
             precioFinal = precioConvertido;
           }

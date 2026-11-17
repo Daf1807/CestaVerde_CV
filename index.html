@@ -131,9 +131,7 @@
   @media (min-width:640px){.qty-wrap .unit{font-size:12.5px;}}
   .qty-input:disabled{opacity:.5;cursor:not-allowed;}
 
-  /* ============================================================
-     BOTONES RÁPIDOS (¼/½/1 kg para kg · 1/2/3 para unidad y atado)
-     ============================================================ */
+  /* Botones rápidos */
   .qty-presets{display:flex;gap:5px;margin-top:2px;flex-wrap:wrap;}
   .qty-presets button{flex:1 1 auto;min-width:0;padding:5px 6px;font-size:11px;font-weight:700;font-family:var(--font-body);background:var(--blanco);border:2px solid var(--carbon);border-radius:var(--radio-sm);color:var(--carbon);cursor:pointer;transition:all .12s;line-height:1;letter-spacing:0.01em;box-shadow:1px 1px 0 var(--carbon);white-space:nowrap;}
   .qty-presets button:hover:not(:disabled){background:var(--miel-suave);transform:translate(-1px,-1px);box-shadow:2px 2px 0 var(--carbon);}
@@ -1243,7 +1241,6 @@ function bindQtyInputs(){
   });
 }
 
-/* Enlazar clics en botones rápidos (kg y unidad/atado) */
 function bindPresets(){
   document.querySelectorAll('[data-preset]').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -1268,7 +1265,6 @@ function bindPresets(){
   });
 }
 
-/* Resaltar el botón cuyo valor coincide con la cantidad actual */
 function actualizarPresetsActivos(codigo, qty){
   const cont = document.querySelector(`.qty-presets[data-presets="${codigo}"]`);
   if (!cont) return;
@@ -2001,6 +1997,12 @@ function renderBannerPedido(){
     </div>`;
 }
 
+/* ============================================================
+   FIREBASE — PRECIOS DE LA RONDA (CON PARCHE DEFENSIVO)
+   El admin guarda P_L_final en S/ por unidad de venta.
+   Si por alguna razón viene en S//kg (bug de versiones viejas),
+   lo detectamos y convertimos a S/ por unidad de venta.
+   ============================================================ */
 function initFirebaseRonda(){
   rondaActivaId = getRondaId();
   try{
@@ -2009,10 +2011,37 @@ function initFirebaseRonda(){
       snap.forEach(d => {
         const data = d.data() || {};
         const cod = data.codigo || data.codigo_producto || d.id;
-        const n = Number(data.precio ?? data.P_L_final ?? data.P_L_mercado);
         const p = getProducto(cod);
-        if (p && !isNaN(n) && n > 0 && p.precio !== n){
-          p.precio = n;
+        if (!p) return;
+
+        // P_L_final viene en S/ por unidad de venta (lo correcto del admin)
+        const plFinal  = Number(data.P_L_final);
+        const plMercado = Number(data.P_L_mercado);
+
+        let precioFinal = null;
+        if (!isNaN(plFinal) && plFinal > 0){
+          precioFinal = plFinal;
+        } else if (!isNaN(plMercado) && plMercado > 0){
+          precioFinal = plMercado;
+        }
+
+        // Sanity check: si el precio es > 5x el P_L_mercado y el producto tiene
+        // equiv_kg < 1 (atadito, unidad), asumimos que viene en S//kg y lo
+        // convertimos a S/ por unidad de venta.
+        if (precioFinal != null && !isNaN(plMercado) && plMercado > 0){
+          const eq = Number(p.equiv_kg) || 1;
+          if (precioFinal > plMercado * 5 && eq < 1){
+            const precioConvertido = +(precioFinal * eq).toFixed(2);
+            console.warn(
+              '[MUYUYU] Precio corregido para ' + cod + ': ' +
+              plFinal + ' S//kg → ' + precioConvertido + ' S/' + p.unidad
+            );
+            precioFinal = precioConvertido;
+          }
+        }
+
+        if (precioFinal != null && precioFinal > 0 && p.precio !== precioFinal){
+          p.precio = precioFinal;
           huboCambios = true;
         }
       });

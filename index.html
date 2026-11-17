@@ -132,7 +132,7 @@
   .qty-input:disabled{opacity:.5;cursor:not-allowed;}
 
   /* ============================================================
-     NUEVO: BOTONES RÁPIDOS ¼ kg / ½ kg / 1 kg (solo productos por kg)
+     BOTONES RÁPIDOS (¼/½/1 kg para kg · 1/2/3 para unidad y atado)
      ============================================================ */
   .qty-presets{display:flex;gap:5px;margin-top:2px;flex-wrap:wrap;}
   .qty-presets button{flex:1 1 auto;min-width:0;padding:5px 6px;font-size:11px;font-weight:700;font-family:var(--font-body);background:var(--blanco);border:2px solid var(--carbon);border-radius:var(--radio-sm);color:var(--carbon);cursor:pointer;transition:all .12s;line-height:1;letter-spacing:0.01em;box-shadow:1px 1px 0 var(--carbon);white-space:nowrap;}
@@ -1153,13 +1153,23 @@ function renderCatalogo(){
       const enCarrito = qty > 0;
       const fotoStyle = `--bg-size:${p.bgSize}; --bg-pos:${p.bgPos};`;
       const rangoTxt = (p.unidad === 'kg') ? 'Rango: 0.9 – 1.1 kg' : '';
-      // NUEVO: botones rápidos solo para productos por kg
-      const presetsHTML = (p.unidad === 'kg') ? `
-        <div class="qty-presets" data-presets="${p.codigo}">
-          <button type="button" data-preset="0.25" data-codigo="${p.codigo}" ${bloqueado?'disabled':''}>¼ kg</button>
-          <button type="button" data-preset="0.5"  data-codigo="${p.codigo}" ${bloqueado?'disabled':''}>½ kg</button>
-          <button type="button" data-preset="1"    data-codigo="${p.codigo}" ${bloqueado?'disabled':''}>1 kg</button>
-        </div>` : '';
+      // Botones rápidos: kg → ¼ / ½ / 1 kg · unidad/atado → 1 / 2 / 3
+      let presetsHTML = '';
+      if (p.unidad === 'kg') {
+        presetsHTML = `
+          <div class="qty-presets" data-presets="${p.codigo}">
+            <button type="button" data-preset="0.25" data-codigo="${p.codigo}" ${bloqueado?'disabled':''}>¼ kg</button>
+            <button type="button" data-preset="0.5"  data-codigo="${p.codigo}" ${bloqueado?'disabled':''}>½ kg</button>
+            <button type="button" data-preset="1"    data-codigo="${p.codigo}" ${bloqueado?'disabled':''}>1 kg</button>
+          </div>`;
+      } else if (p.unidad === 'unidad' || p.unidad === 'atado') {
+        presetsHTML = `
+          <div class="qty-presets" data-presets="${p.codigo}">
+            <button type="button" data-preset="1" data-codigo="${p.codigo}" ${bloqueado?'disabled':''}>1</button>
+            <button type="button" data-preset="2" data-codigo="${p.codigo}" ${bloqueado?'disabled':''}>2</button>
+            <button type="button" data-preset="3" data-codigo="${p.codigo}" ${bloqueado?'disabled':''}>3</button>
+          </div>`;
+      }
       html += `
         <div class="producto ${enCarrito ? 'en-carrito' : ''}" data-codigo="${p.codigo}">
           <div class="producto-foto" style="${fotoStyle}"></div>
@@ -1233,7 +1243,7 @@ function bindQtyInputs(){
   });
 }
 
-/* NUEVO: enlazar clics en botones rápidos */
+/* Enlazar clics en botones rápidos (kg y unidad/atado) */
 function bindPresets(){
   document.querySelectorAll('[data-preset]').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -1258,7 +1268,7 @@ function bindPresets(){
   });
 }
 
-/* NUEVO: resaltar el botón cuyo valor coincide con la cantidad actual */
+/* Resaltar el botón cuyo valor coincide con la cantidad actual */
 function actualizarPresetsActivos(codigo, qty){
   const cont = document.querySelector(`.qty-presets[data-presets="${codigo}"]`);
   if (!cont) return;
@@ -1543,10 +1553,18 @@ function bindDrawerInputs(){
   });
 
   document.querySelectorAll('[data-mas]').forEach(btn => {
-    btn.addEventListener('click', () => cambiarCantidad(btn.dataset.mas, +0.5));
+    btn.addEventListener('click', () => {
+      const p = getProducto(btn.dataset.mas);
+      const paso = (p && p.unidad === 'kg') ? 0.5 : 1;
+      cambiarCantidad(btn.dataset.mas, +paso);
+    });
   });
   document.querySelectorAll('[data-menos]').forEach(btn => {
-    btn.addEventListener('click', () => cambiarCantidad(btn.dataset.menos, -0.5));
+    btn.addEventListener('click', () => {
+      const p = getProducto(btn.dataset.menos);
+      const paso = (p && p.unidad === 'kg') ? 0.5 : 1;
+      cambiarCantidad(btn.dataset.menos, -paso);
+    });
   });
   document.querySelectorAll('[data-del]').forEach(btn => {
     btn.addEventListener('click', () => eliminarDelCarrito(btn.dataset.del));

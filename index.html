@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
-  :root{--rojo-aji:#C7392B;--rojo-aji-osc:#9E2A1F;--naranja-zanah:#E8763A;--miel:#E9A521;--miel-suave:#F5D68A;--verde-culantro:#3F7D3F;--verde-hoja:#2E5E2E;--crema:#FAF4E8;--crema-2:#F0E6D2;--blanco:#FFFDF9;--carbon:#2B1810;--texto:#3D2817;--texto-suave:#7A5C47;--texto-muy-suave:#A88A72;--borde:#E5D5BE;--borde-fuerte:#D4BFA0;--radio-sm:10px;--radio:14px;--radio-lg:20px;--radio-full:999px;--font-display:'Bricolage Grotesque',Georgia,serif;--font-body:'Inter',system-ui,-apple-system,sans-serif;--font-hand:'Caveat',cursive;}
+ :root{--rojo-aji:#C7392B;--rojo-aji-osc:#9E2A1F;--naranja-zanah:#E8763A;--miel:#E9A521;--miel-suave:#F5D68A;--verde-culantro:#3F7D3F;--verde-hoja:#2E5E2E;--crema:#FAF4E8;--crema-2:#F0E6D2;--blanco:#FFFDF9;--carbon:#2B1810;--texto:#3D2817;--texto-suave:#7A5C47;--texto-muy-suave:#A88A72;--borde:#E5D5BE;--borde-fuerte:#D4BFA0;--radio-sm:10px;--radio:14px;--radio-lg:20px;--radio-full:999px;--font-display:'Bricolage Grotesque',Georgia,serif;--font-body:'Inter',system-ui,-apple-system,sans-serif;--font-hand:'Caveat',cursive;}
   *{box-sizing:border-box;margin:0;padding:0;}
   html{scroll-behavior:smooth;color-scheme:light;}
   body{background:var(--crema);background-image:radial-gradient(circle at 15% 5%,rgba(233,165,33,0.06) 0%,transparent 45%),radial-gradient(circle at 85% 95%,rgba(199,57,43,0.05) 0%,transparent 45%);color:var(--texto);font-family:var(--font-body);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased;padding-bottom:130px;min-height:100vh;overflow-x:hidden;}
@@ -110,11 +110,14 @@
   .producto{background:var(--crema);border:2px solid var(--carbon);border-radius:var(--radio);display:flex;flex-direction:column;transition:all .15s;box-shadow:2px 2px 0 var(--carbon);overflow:hidden;position:relative;min-width:0;}
   .producto:hover{transform:translate(-2px,-2px);box-shadow:4px 4px 0 var(--carbon);}
   .producto.en-carrito{background:var(--miel-suave);box-shadow:4px 4px 0 var(--rojo-aji);}
-  .producto-foto{width:100%;aspect-ratio:1/1;border-bottom:2px solid var(--carbon);background-color:var(--crema-2);background-image:var(--foto-url);background-repeat:no-repeat;background-size:cover;background-position:center;image-rendering:-webkit-optimize-contrast;}  .producto-contenido{padding:10px 10px 12px;display:flex;flex-direction:column;gap:6px;flex:1;min-width:0;}
+  .producto-foto{width:100%;aspect-ratio:1/1;border-bottom:2px solid var(--carbon);background-color:var(--crema-2);background-image:var(--foto-url);background-repeat:no-repeat;background-size:cover;background-position:center;image-rendering:-webkit-optimize-contrast;}
+  .producto-contenido{padding:10px 10px 12px;display:flex;flex-direction:column;gap:6px;flex:1;min-width:0;}
   @media (min-width:640px){.producto-contenido{padding:14px 14px 16px;gap:8px;}}
   .producto-nombre{font-size:13px;font-weight:700;line-height:1.25;color:var(--carbon);word-break:break-word;}
-.producto-unidad{font-family:var(--font-body);font-size:11px;color:var(--rojo-aji);border:1.5px solid var(--rojo-aji);padding:1px 6px;border-radius:6px;display:inline-block;margin-top:4px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;background:transparent;}.producto-precio small{font-size:12px;color:var(--texto-suave);font-family:var(--font-body);font-weight:800;letter-spacing:0;text-transform:lowercase;}  .producto-rango{font-size:10px;color:var(--texto-muy-suave);font-weight:600;line-height:1.3;margin-top:1px;}
-  @media (min-width:640px){.producto-nombre{font-size:14.5px;}.producto-unidad{font-size:15px;margin-top:-4px;}.producto-precio{font-size:22px;}.producto-precio small{font-size:11.5px;}.producto-rango{font-size:11px;}}
+  .producto-precio{font-family:var(--font-display);font-size:18px;font-weight:800;color:var(--rojo-aji);line-height:1;letter-spacing:-0.02em;margin-top:auto;}
+  .producto-precio small{font-size:12px;color:var(--texto-suave);font-family:var(--font-body);font-weight:800;letter-spacing:0;text-transform:lowercase;}
+  .producto-rango{font-size:10px;color:var(--texto-muy-suave);font-weight:600;line-height:1.3;margin-top:1px;}
+  @media (min-width:640px){.producto-nombre{font-size:14.5px;}.producto-precio{font-size:22px;}.producto-precio small{font-size:11.5px;}.producto-rango{font-size:11px;}}
   .qty-wrap{display:flex;align-items:center;gap:6px;background:var(--blanco);border:2px solid var(--carbon);border-radius:var(--radio-sm);padding:5px 7px 5px 9px;transition:all .15s;min-width:0;}
   @media (min-width:640px){.qty-wrap{gap:8px;padding:6px 8px 6px 12px;}}
   .producto.en-carrito .qty-wrap{background:var(--blanco);border-color:var(--rojo-aji);}
@@ -123,7 +126,7 @@
   .qty-input{flex:1;width:100%;min-width:0;border:none;background:transparent;outline:none;font-size:15px;font-weight:700;text-align:right;color:var(--carbon);padding:4px 0;font-family:var(--font-display);}
   @media (min-width:640px){.qty-input{font-size:16px;}}
   .qty-input::placeholder{color:#C9B79F;font-weight:500;font-family:var(--font-body);}
-.qty-wrap .unit{font-size:13px;font-weight:800;color:var(--carbon);flex-shrink:0;padding-right:4px;font-family:var(--font-body);text-transform:uppercase;}
+  .qty-wrap .unit{font-size:13px;font-weight:800;color:var(--carbon);flex-shrink:0;padding-right:4px;font-family:var(--font-body);text-transform:uppercase;}
   @media (min-width:640px){.qty-wrap .unit{font-size:12.5px;}}
   .qty-input:disabled{opacity:.5;cursor:not-allowed;}
 
@@ -1179,11 +1182,10 @@ function renderCatalogo(){
         <div class="producto ${enCarrito ? 'en-carrito' : ''}" data-codigo="${p.codigo}">
           <div class="producto-foto" style="${fotoStyle}"></div>
           <div class="producto-contenido">
-                  <div>
+            <div>
               <div class="producto-nombre">${escapar(p.nombre)}</div>
-              <div class="producto-unidad">${p.unidad === 'unidad' ? 'unidad' : p.unidad === 'atado' ? 'atado' : 'por kg'}</div>
             </div>
-            <div class="producto-precio">${soles(p.precio)} <small style="font-weight:700; color:var(--carbon);">/ ${p.unidad === 'unidad' ? 'unid' : p.unidad === 'atado' ? 'atado' : 'kg'}</small></div>
+            <div class="producto-precio">${soles(p.precio)} <small style="font-weight:800; color:var(--texto-suave); text-transform:lowercase;">/ ${p.unidad === 'unidad' ? 'unid' : p.unidad === 'atado' ? 'atado' : 'kg'}</small></div>
             ${rangoTxt ? `<div class="producto-rango">${rangoTxt}</div>` : ''}
             <div class="qty-wrap">
               <label for="qty-${p.codigo}">Cant.</label>

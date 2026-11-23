@@ -113,9 +113,7 @@
   .producto-foto{width:100%;aspect-ratio:1/1;border-bottom:2px solid var(--carbon);background-color:var(--crema-2);background-image:var(--foto-url);background-repeat:no-repeat;background-size:cover;background-position:center;image-rendering:-webkit-optimize-contrast;}  .producto-contenido{padding:10px 10px 12px;display:flex;flex-direction:column;gap:6px;flex:1;min-width:0;}
   @media (min-width:640px){.producto-contenido{padding:14px 14px 16px;gap:8px;}}
   .producto-nombre{font-size:13px;font-weight:700;line-height:1.25;color:var(--carbon);word-break:break-word;}
-.producto-unidad{font-family:var(--font-body);font-size:12px;color:#fff;background:var(--carbon);padding:2px 8px;border-radius:4px;display:inline-block;margin-top:4px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;}  .producto-precio{font-family:var(--font-display);font-size:18px;font-weight:800;color:var(--rojo-aji);line-height:1;letter-spacing:-0.02em;margin-top:auto;}
-  .producto-precio small{font-size:11px;color:var(--texto-suave);font-family:var(--font-body);font-weight:500;letter-spacing:0;}
-  .producto-rango{font-size:10px;color:var(--texto-muy-suave);font-weight:600;line-height:1.3;margin-top:1px;}
+.producto-unidad{font-family:var(--font-body);font-size:11px;color:var(--rojo-aji);border:1.5px solid var(--rojo-aji);padding:1px 6px;border-radius:6px;display:inline-block;margin-top:4px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;background:transparent;}.producto-precio small{font-size:12px;color:var(--texto-suave);font-family:var(--font-body);font-weight:800;letter-spacing:0;text-transform:lowercase;}  .producto-rango{font-size:10px;color:var(--texto-muy-suave);font-weight:600;line-height:1.3;margin-top:1px;}
   @media (min-width:640px){.producto-nombre{font-size:14.5px;}.producto-unidad{font-size:15px;margin-top:-4px;}.producto-precio{font-size:22px;}.producto-precio small{font-size:11.5px;}.producto-rango{font-size:11px;}}
   .qty-wrap{display:flex;align-items:center;gap:6px;background:var(--blanco);border:2px solid var(--carbon);border-radius:var(--radio-sm);padding:5px 7px 5px 9px;transition:all .15s;min-width:0;}
   @media (min-width:640px){.qty-wrap{gap:8px;padding:6px 8px 6px 12px;}}
@@ -1168,12 +1166,13 @@ function renderCatalogo(){
             <button type="button" data-preset="0.5"  data-codigo="${p.codigo}" ${bloqueado?'disabled':''}>½ kg</button>
             <button type="button" data-preset="1"    data-codigo="${p.codigo}" ${bloqueado?'disabled':''}>1 kg</button>
           </div>`;
-      } else if (p.unidad === 'unidad' || p.unidad === 'atado') {
+           } else if (p.unidad === 'unidad' || p.unidad === 'atado') {
+        const txtUnid = p.unidad === 'unidad' ? 'unid' : 'atado';
         presetsHTML = `
           <div class="qty-presets" data-presets="${p.codigo}">
-            <button type="button" data-preset="1" data-codigo="${p.codigo}" ${bloqueado?'disabled':''}>1</button>
-            <button type="button" data-preset="2" data-codigo="${p.codigo}" ${bloqueado?'disabled':''}>2</button>
-            <button type="button" data-preset="3" data-codigo="${p.codigo}" ${bloqueado?'disabled':''}>3</button>
+            <button type="button" data-preset="1" data-codigo="${p.codigo}" ${bloqueado?'disabled':''}>1 ${txtUnid}</button>
+            <button type="button" data-preset="2" data-codigo="${p.codigo}" ${bloqueado?'disabled':''}>2 ${txtUnid}</button>
+            <button type="button" data-preset="3" data-codigo="${p.codigo}" ${bloqueado?'disabled':''}>3 ${txtUnid}</button>
           </div>`;
       }
       html += `

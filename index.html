@@ -2041,28 +2041,21 @@ function initFirebaseRonda(){
         // P_L_final viene en S/ por unidad de venta (correcto del admin).
         // Si viene en S//kg (bug viejo), convertimos con equiv_kg de Firestore.
         // ------------------------------------------------------------
-        const plFinal   = Number(data.P_L_final);
-        const plMercado = Number(data.P_L_mercado);
+        const plFinal   = Number(data.P_L_final); // En Admin esto es S/ por KG
+        const plMercado = Number(data.P_L_mercado); // En Admin esto es S/ por UNIDAD
 
         let precioFinal = null;
+        const eq = p.equiv_kg || 1; // El peso del atado (ej: 0.3 para el apio)
+
         if (!isNaN(plFinal) && plFinal > 0){
-          precioFinal = plFinal;
+          // Como el P_L_final está en kilos, lo multiplicamos por el peso.
+          // Ejemplo Apio: 14.40 * 0.3 = 4.32
+          precioFinal = +(plFinal * eq).toFixed(2);
         } else if (!isNaN(plMercado) && plMercado > 0){
+          // Si no hay P_L_final, usamos el de mercado (que ya está en unidades).
           precioFinal = plMercado;
         }
-
-        if (precioFinal != null && !isNaN(plMercado) && plMercado > 0){
-          const eq = p.equiv_kg || 1;
-          if (precioFinal > plMercado * 5 && eq < 1){
-            const precioConvertido = +(precioFinal * eq).toFixed(2);
-            console.warn(
-              '[MUYUYU] Precio corregido para ' + cod + ': ' +
-              plFinal + ' S//kg → ' + precioConvertido + ' S/' + p.unidad +
-              ' (equiv_kg=' + eq + ' desde Firestore)'
-            );
-            precioFinal = precioConvertido;
-          }
-        }
+       
 
         if (precioFinal != null && precioFinal > 0 && p.precio !== precioFinal){
           p.precio = precioFinal;

@@ -110,8 +110,7 @@
   .producto{background:var(--crema);border:2px solid var(--carbon);border-radius:var(--radio);display:flex;flex-direction:column;transition:all .15s;box-shadow:2px 2px 0 var(--carbon);overflow:hidden;position:relative;min-width:0;}
   .producto:hover{transform:translate(-2px,-2px);box-shadow:4px 4px 0 var(--carbon);}
   .producto.en-carrito{background:var(--miel-suave);box-shadow:4px 4px 0 var(--rojo-aji);}
-  .producto-foto{width:100%;aspect-ratio:1/1;border-bottom:2px solid var(--carbon);background-color:var(--crema-2);background-image:url('Catálogo.png');background-repeat:no-repeat;background-size:var(--bg-size);background-position:var(--bg-pos);image-rendering:-webkit-optimize-contrast;}
-  .producto-contenido{padding:10px 10px 12px;display:flex;flex-direction:column;gap:6px;flex:1;min-width:0;}
+  .producto-foto{width:100%;aspect-ratio:1/1;border-bottom:2px solid var(--carbon);background-color:var(--crema-2);background-image:var(--foto-url);background-repeat:no-repeat;background-size:cover;background-position:center;image-rendering:-webkit-optimize-contrast;}  .producto-contenido{padding:10px 10px 12px;display:flex;flex-direction:column;gap:6px;flex:1;min-width:0;}
   @media (min-width:640px){.producto-contenido{padding:14px 14px 16px;gap:8px;}}
   .producto-nombre{font-size:13px;font-weight:700;line-height:1.25;color:var(--carbon);word-break:break-word;}
   .producto-unidad{font-family:var(--font-hand);font-size:14px;color:var(--texto-suave);margin-top:-2px;font-weight:600;}
@@ -685,30 +684,36 @@ function pedidoBloqueado(){
    que viene en rondas/{ronda}/precios/{codigo}.equiv_kg.
    ============================================================ */
 const PRODUCTOS = [
-  { codigo:'PR-001', nombre:'Papa Amarilla',   grupo:'Básicos',             unidad:'kg',     precio:6.38,  bgSize:'417.96% 808.42%', bgPos:'1.28% 0.74%', equiv_kg:1 },
-  { codigo:'PR-002', nombre:'Papa Blanca',     grupo:'Básicos',             unidad:'kg',     precio:2.35,  bgSize:'417.96% 808.42%', bgPos:'33.38% 0.74%', equiv_kg:1 },
-  { codigo:'PR-003', nombre:'Papa Canchán',    grupo:'Básicos',             unidad:'kg',     precio:3.58,  bgSize:'426.67% 808.42%', bgPos:'66.33% 0.74%', equiv_kg:1 },
-  { codigo:'PR-004', nombre:'Tomate Katia',    grupo:'Básicos',             unidad:'kg',     precio:6.90,  bgSize:'445.22% 787.69%', bgPos:'98.87% 0.37%', equiv_kg:1 },
-  { codigo:'PR-005', nombre:'Cebolla Roja',    grupo:'Básicos',             unidad:'kg',     precio:3.85,  bgSize:'417.96% 830.27%', bgPos:'1.28% 15.91%', equiv_kg:1 },
-  { codigo:'PR-006', nombre:'Zanahoria',       grupo:'Básicos',             unidad:'kg',     precio:6.90,  bgSize:'401.57% 749.27%', bgPos:'33.16% 15.03%', equiv_kg:1 },
-  { codigo:'PR-007', nombre:'Choclo Serrano',  grupo:'Básicos',             unidad:'unidad', precio:3.63,  bgSize:'393.85% 830.27%', bgPos:'66.75% 15.54%', equiv_kg:0.42 },
-  { codigo:'PR-008', nombre:'Camote Amarillo', grupo:'Básicos',             unidad:'kg',     precio:1.61,  bgSize:'426.67% 787.69%', bgPos:'98.85% 15.66%', equiv_kg:1 },
-  { codigo:'PR-009', nombre:'Yuca Amarilla',   grupo:'Básicos',             unidad:'kg',     precio:2.81,  bgSize:'409.60% 768.00%', bgPos:'1.29% 31.06%', equiv_kg:1 },
-  { codigo:'PR-010', nombre:'Zapallo Macre',   grupo:'Básicos',             unidad:'kg',     precio:4.90,  bgSize:'386.42% 749.27%', bgPos:'33.60% 30.80%', equiv_kg:1 },
-  { codigo:'PR-013', nombre:'Cebolla China',   grupo:'Sazón y Aderezos',    unidad:'atado',  precio:1.00,  bgSize:'386.42% 768.00%', bgPos:'0.66% 45.28%', equiv_kg:0.1 },
-  { codigo:'PR-014', nombre:'Ajo Criollo',     grupo:'Sazón y Aderezos',    unidad:'kg',     precio:6.15,  bgSize:'435.74% 930.91%', bgPos:'34.85% 45.95%', equiv_kg:1 },
-  { codigo:'PR-015', nombre:'Kion',            grupo:'Sazón y Aderezos',    unidad:'kg',     precio:5.89,  bgSize:'393.85% 853.33%', bgPos:'67.41% 45.72%', equiv_kg:1 },
-  { codigo:'PR-016', nombre:'Ají Amarillo',    grupo:'Sazón y Aderezos',    unidad:'kg',     precio:11.90, bgSize:'426.67% 853.33%', bgPos:'98.85% 45.72%', equiv_kg:1 },
-  { codigo:'PR-018', nombre:'Ají Rocoto',      grupo:'Sazón y Aderezos',    unidad:'kg',     precio:11.90, bgSize:'435.74% 830.27%', bgPos:'34.85% 59.59%', equiv_kg:1 },
-  { codigo:'PR-019', nombre:'Huacatay',        grupo:'Sazón y Aderezos',    unidad:'atado',  precio:1.00,  bgSize:'393.85% 787.69%', bgPos:'67.41% 59.66%', equiv_kg:0.1 },
-  { codigo:'PR-020', nombre:'Culantro',        grupo:'Hierbas y Aromáticos',unidad:'atado',  precio:1.00,  bgSize:'426.67% 808.42%', bgPos:'98.85% 59.44%', equiv_kg:0.15 },
-  { codigo:'PR-021', nombre:'Perejil',         grupo:'Hierbas y Aromáticos',unidad:'atado',  precio:1.00,  bgSize:'401.57% 698.18%', bgPos:'1.30% 75.61%', equiv_kg:0.1 },
-  { codigo:'PR-022', nombre:'Apio',            grupo:'Especial',            unidad:'atado',  precio:4.00,  bgSize:'393.85% 667.83%', bgPos:'33.38% 75.42%', equiv_kg:0.3 },
-  { codigo:'PR-023', nombre:'Poro',            grupo:'Especial',            unidad:'unidad', precio:2.99,  bgSize:'393.85% 653.62%', bgPos:'67.41% 75.71%', equiv_kg:0.26 },
-  { codigo:'PR-025', nombre:'Ají Escabeche',   grupo:'Especial',            unidad:'kg',     precio:8.08,  bgSize:'401.57% 808.42%', bgPos:'1.30% 91.38%', equiv_kg:1 },
-  { codigo:'PR-026', nombre:'Limón Cítrico',   grupo:'Especial',            unidad:'kg',     precio:5.90,  bgSize:'409.60% 768.00%', bgPos:'34.24% 91.32%', equiv_kg:1 },
-  { codigo:'PR-027', nombre:'Vainita',         grupo:'Especial',            unidad:'kg',     precio:10.33, bgSize:'393.85% 749.27%', bgPos:'67.41% 92.04%', equiv_kg:1 },
-  { codigo:'PR-028', nombre:'Zapallo Loche',   grupo:'Especial',            unidad:'unidad', precio:22.31, bgSize:'426.67% 749.27%', bgPos:'98.85% 91.66%', equiv_kg:1.5 }
+  { codigo:'PR-001', nombre:'Papa Amarilla',         grupo:'Básicos',              unidad:'kg',     precio:6.38,  equiv_kg:1,    foto:'Papa Amarilla.png' },
+  { codigo:'PR-002', nombre:'Papa Blanca',           grupo:'Básicos',              unidad:'kg',     precio:2.35,  equiv_kg:1,    foto:'Papa Blanca.png' },
+  { codigo:'PR-003', nombre:'Papa Canchán',          grupo:'Básicos',              unidad:'kg',     precio:3.58,  equiv_kg:1,    foto:'Papa Canchán.png' },
+  { codigo:'PR-004', nombre:'Tomate Katia',          grupo:'Básicos',              unidad:'kg',     precio:6.90,  equiv_kg:1,    foto:'Tomate Katia.png' },
+  { codigo:'PR-005', nombre:'Cebolla Roja',          grupo:'Básicos',              unidad:'kg',     precio:3.85,  equiv_kg:1,    foto:'Cebolla Roja.png' },
+  { codigo:'PR-006', nombre:'Zanahoria',             grupo:'Básicos',              unidad:'kg',     precio:6.90,  equiv_kg:1,    foto:'Zanahoria.png' },
+  { codigo:'PR-007', nombre:'Choclo Serrano',        grupo:'Básicos',              unidad:'unidad', precio:3.63,  equiv_kg:0.42, foto:'Choclo Serrano.png' },
+  { codigo:'PR-008', nombre:'Camote Amarillo',       grupo:'Básicos',              unidad:'kg',     precio:1.61,  equiv_kg:1,    foto:'Camote Amarillo.png' },
+  { codigo:'PR-009', nombre:'Yuca Amarilla',         grupo:'Sazón y Aderezos',     unidad:'kg',     precio:2.81,  equiv_kg:1,    foto:'Yuca Amarilla.png' },
+  { codigo:'PR-010', nombre:'Zapallo Macre',         grupo:'Especial',             unidad:'kg',     precio:4.90,  equiv_kg:1,    foto:'Zapallo Macre.png' },
+  { codigo:'PR-011', nombre:'Albahaca',              grupo:'Sazón y Aderezos',     unidad:'atado',  precio:1.00,  equiv_kg:0.10, foto:'Albahaca.png' },
+  { codigo:'PR-012', nombre:'Camote Morado',         grupo:'Básicos',              unidad:'kg',     precio:1.61,  equiv_kg:1,    foto:'Camote Morado.png' },
+  { codigo:'PR-013', nombre:'Cebolla China',         grupo:'Sazón y Aderezos',     unidad:'atado',  precio:1.00,  equiv_kg:0.10, foto:'Cebolla China.png' },
+  { codigo:'PR-014', nombre:'Ajo Criollo',           grupo:'Sazón y Aderezos',     unidad:'kg',     precio:6.15,  equiv_kg:1,    foto:'Ajo Criollo.png' },
+  { codigo:'PR-015', nombre:'Kion',                  grupo:'Sazón y Aderezos',     unidad:'kg',     precio:5.89,  equiv_kg:1,    foto:'Kion.png' },
+  { codigo:'PR-016', nombre:'Ají Escabeche',         grupo:'Sazón y Aderezos',     unidad:'kg',     precio:8.08,  equiv_kg:1,    foto:'Ají Escabeche.png' },
+  { codigo:'PR-017', nombre:'Pepinillo',             grupo:'Especial',             unidad:'unidad', precio:3.00,  equiv_kg:1,    foto:'Pepinillo.png' },
+  { codigo:'PR-018', nombre:'Ají Rocoto',            grupo:'Especial',             unidad:'kg',     precio:11.90, equiv_kg:1,    foto:'Ají Rocoto.png' },
+  { codigo:'PR-019', nombre:'Huacatay',              grupo:'Hierbas y Aromáticos', unidad:'atado',  precio:1.00,  equiv_kg:0.10, foto:'Huacatay.png' },
+  { codigo:'PR-020', nombre:'Culantro',              grupo:'Hierbas y Aromáticos', unidad:'atado',  precio:1.00,  equiv_kg:0.15, foto:'Culantro.png' },
+  { codigo:'PR-021', nombre:'Perejil',               grupo:'Hierbas y Aromáticos', unidad:'atado',  precio:1.00,  equiv_kg:0.10, foto:'Perejil.png' },
+  { codigo:'PR-022', nombre:'Apio',                  grupo:'Especial',             unidad:'atado',  precio:4.00,  equiv_kg:0.30, foto:'Apio.png' },
+  { codigo:'PR-023', nombre:'Poro',                  grupo:'Especial',             unidad:'unidad', precio:2.99,  equiv_kg:0.26, foto:'Poro.png' },
+  { codigo:'PR-024', nombre:'Rabanito',              grupo:'Especial',             unidad:'kg',     precio:2.50,  equiv_kg:1,    foto:'Rabanito.png' },
+  { codigo:'PR-025', nombre:'Espinaca',              grupo:'Especial',             unidad:'kg',     precio:1.50,  equiv_kg:1,    foto:'Espinaca.png' },
+  { codigo:'PR-026', nombre:'Limón Cítrico',         grupo:'Especial',             unidad:'kg',     precio:5.90,  equiv_kg:1,    foto:'Limón Cítrico.png' },
+  { codigo:'PR-027', nombre:'Vainita',               grupo:'Especial',             unidad:'kg',     precio:10.33, equiv_kg:1,    foto:'Vainita.png' },
+  { codigo:'PR-028', nombre:'Zapallo Loche',         grupo:'Especial',             unidad:'unidad', precio:22.31, equiv_kg:1.5,  foto:'Zapallo Loche.png' },
+  { codigo:'PR-029', nombre:'Cebolla Cabeza Blanca', grupo:'Básicos',              unidad:'kg',     precio:3.85,  equiv_kg:1,    foto:'Cebolla Cabeza Blanca.png' },
+  { codigo:'PR-030', nombre:'Zapallo Italiano',      grupo:'Especial',             unidad:'kg',     precio:3.50,  equiv_kg:1,    foto:'Zapallo Italiano.png' }
 ];
 
 const ORDEN_GRUPOS = ['Básicos','Sazón y Aderezos','Hierbas y Aromáticos','Especial'];
@@ -1154,7 +1159,7 @@ function renderCatalogo(){
     grupos[g].forEach(p => {
       const qty = (carrito[p.codigo] && carrito[p.codigo].qty) || 0;
       const enCarrito = qty > 0;
-      const fotoStyle = `--bg-size:${p.bgSize}; --bg-pos:${p.bgPos};`;
+      const fotoStyle = `--foto-url:url('${encodeURI(p.foto)}');`;
       const rangoTxt = (p.unidad === 'kg') ? 'Rango: 0.9 – 1.1 kg' : '';
       // Botones rápidos: kg → ¼ / ½ / 1 kg · unidad/atado → 1 / 2 / 3
       let presetsHTML = '';

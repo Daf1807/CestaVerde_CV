@@ -940,14 +940,39 @@ function calcularDistanciaKm(){
   const c = 2*Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
   return R*c;
 }
+/* ── NUEVO: bandera para saber si el delivery se coordina ── */
+let deliveryPorCoordinar = false;
+let motivoCoordinacion   = '';
+
 function costoDelivery(){
+  // Reiniciamos la bandera en cada cálculo
+  deliveryPorCoordinar = false;
+  motivoCoordinacion   = '';
+
   if (recogerEnLocal) return 0;
-  const peso = pesoTotalCarrito();
+
+  const peso      = pesoTotalCarrito();
   const distancia = calcularDistanciaKm();
-  if (distancia === null) return CONFIG_DELIVERY.pie.tarifasDistancia[0].costo;
-  const cfg = CONFIG_DELIVERY.pie;
-  if (distancia > cfg.maxDistancia) return -1;
-  if (peso > cfg.maxPeso) return -2;
+  const cfg       = CONFIG_DELIVERY.pie;
+
+  // Sin coordenadas todavía: usar tarifa mínima, no bloquear
+  if (distancia === null) return cfg.tarifasDistancia[0].costo;
+
+  // Fuera de cobertura → NO se bloquea, se deriva a coordinación por WhatsApp
+  if (distancia > cfg.maxDistancia){
+    deliveryPorCoordinar = true;
+    motivoCoordinacion   = `distancia (${distancia.toFixed(2)} km > ${cfg.maxDistancia} km)`;
+    return 0;
+  }
+
+  // Excede peso → NO se bloquea, se deriva a coordinación por WhatsApp
+  if (peso > cfg.maxPeso){
+    deliveryPorCoordinar = true;
+    motivoCoordinacion   = `peso (${peso.toFixed(2)} kg > ${cfg.maxPeso} kg)`;
+    return 0;
+  }
+
+  // Todo dentro de rango → tarifa normal
   let tarifaBase = 0;
   for (const r of cfg.tarifasDistancia){ if (distancia <= r.maxKm){ tarifaBase = r.costo; break; } }
   let recargoPeso = 0;
@@ -1645,9 +1670,14 @@ function renderResumenHTML(){
 
   const faltaMin = Math.max(0, MINIMO_COMPRA - sub);
 
-  return `<div class="resumen" id="resumen">
+const avisoCoordinacion = deliveryPorCoordinar
+  ? `<div class="aviso aviso-error" style="margin:8px 0;">⚠️ Tu pedido supera ${motivoCoordinacion}. El delivery se coordina por WhatsApp.</div>`
+  : '';
+
+return `<div class="resumen" id="resumen">
     <div class="resumen-linea"><span>Subtotal (${items.length} ${items.length === 1 ? 'producto' : 'productos'})</span><span>${soles(sub)}</span></div>
     <div class="resumen-linea"><span>Delivery</span><span>${deliveryTxt}</span></div>
+    ${avisoCoordinacion}
     ${faltaMin > 0 ? `<div class="resumen-linea"><span>Falta para el mínimo</span><span>${soles(faltaMin)}</span></div>` : ''}
     <div class="resumen-linea total"><span>Total estimado</span><span>${soles(totalCarrito())}</span></div>
   </div>`;
@@ -1766,11 +1796,10 @@ function actualizarBoleta(){
     dirHTML = partes.join('<br>');
   }
 
-  let deliveryTxt;
-  if (recogerEnLocal) deliveryTxt = 'Sin costo';
-  else if (d === -1)  deliveryTxt = '<span class="falta">Fuera de cobertura</span>';
-  else if (d === -2)  deliveryTxt = '<span class="falta">Excede 15 kg</span>';
-  else                deliveryTxt = soles(d);
+let deliveryTxt;
+  if (recogerEnLocal)          deliveryTxt = 'Sin costo';
+  else if (deliveryPorCoordinar) deliveryTxt = `<span class="falta">A coordinar · ${motivoCoordinacion}</span>`;
+  else                         deliveryTxt = soles(d);
 
   el.innerHTML = `
     <div class="boleta-head">
@@ -1794,8 +1823,8 @@ function actualizarBoleta(){
       </div>
       <hr class="boleta-divider">
       <div class="boleta-linea"><span class="label">Subtotal</span><strong>${soles(sub)}</strong></div>
-      <div class="boleta-linea"><span class="label">Delivery</span><strong>${deliveryTxt}</strong></div>
-    </div>
+<div class="boleta-linea"><span class="label">Delivery</span><strong>${deliveryTxt}</strong></div>
+${deliveryPorCoordinar ? `<div class="boleta-linea"><span class="label" style="color:var(--rojo-aji);">⚠️ Atención</span><strong style="color:var(--rojo-aji);">Coordinar delivery por WhatsApp</strong></div>` : ''}    </div>
     <div class="boleta-total">
       <span class="boleta-total-label">Total estimado</span>
       <span class="boleta-total-monto">${soles(totalCarrito())}</span>

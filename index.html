@@ -1874,14 +1874,18 @@ async function confirmarPedido(){
   lineas.push(`Peso aprox.: ${peso.toFixed(2)} kg`);
   lineas.push(`Pago: ${metodoPago === 'yape' ? 'Yape' : 'Efectivo'}`);
   lineas.push('');
-  lineas.push('*Productos*');
-  items.forEach(i => lineas.push(`• ${i.nombre} — ${i.qty} ${i.unidad} — ${soles(i.subtotal)}`));
+lineas.push('*Productos*');
+items.forEach(i => lineas.push(`• ${i.nombre} — ${i.qty} ${i.unidad} — ${soles(i.subtotal)}`));
+lineas.push('');
+lineas.push(`Subtotal: ${soles(sub)}`);
+lineas.push(`Delivery: ${recogerEnLocal ? 'Sin costo (recojo)' : (deliveryPorCoordinar ? `A coordinar (${motivoCoordinacion})` : soles(d))}`);
+lineas.push(`*TOTAL: ${soles(total)}*`);
+if (deliveryPorCoordinar && !recogerEnLocal){
   lineas.push('');
-  lineas.push(`Subtotal: ${soles(sub)}`);
-  lineas.push(`Delivery: ${recogerEnLocal ? 'Sin costo (recojo)' : soles(d)}`);
-  lineas.push(`*TOTAL: ${soles(total)}*`);
-  lineas.push('');
-  lineas.push('Enviado desde CestaVerde.pe');
+  lineas.push(`⚠️ ATENCIÓN: el pedido supera ${motivoCoordinacion}. Coordinemos el delivery por este medio.`);
+}
+lineas.push('');
+lineas.push('Enviado desde CestaVerde.pe');
 
   const mensaje = lineas.join('\n');
   const url = `https://wa.me/${WHATSAPP_NEGOCIO}?text=${encodeURIComponent(mensaje)}`;
@@ -1910,7 +1914,9 @@ async function confirmarPedido(){
     tipo_cliente:      'B2C',
     modalidad,
     metodo_pago:       metodoPagoLabel,
-    costo_delivery:    recogerEnLocal ? 0 : +d.toFixed(2),
+  costo_delivery:      recogerEnLocal ? 0 : +d.toFixed(2),
+   delivery_coordinar:  !recogerEnLocal && deliveryPorCoordinar,
+   delivery_motivo:     (!recogerEnLocal && deliveryPorCoordinar) ? motivoCoordinacion : '',
     comision_yape:     0,
     peso_total_kg:     +peso.toFixed(2),
     estado:            estadoInicial,

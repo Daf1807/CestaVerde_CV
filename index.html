@@ -113,8 +113,7 @@
   .producto-foto{width:100%;aspect-ratio:1/1;border-bottom:2px solid var(--carbon);background-color:var(--crema-2);background-image:var(--foto-url);background-repeat:no-repeat;background-size:cover;background-position:center;image-rendering:-webkit-optimize-contrast;}  .producto-contenido{padding:10px 10px 12px;display:flex;flex-direction:column;gap:6px;flex:1;min-width:0;}
   @media (min-width:640px){.producto-contenido{padding:14px 14px 16px;gap:8px;}}
   .producto-nombre{font-size:13px;font-weight:700;line-height:1.25;color:var(--carbon);word-break:break-word;}
-  .producto-unidad{font-family:var(--font-hand);font-size:14px;color:var(--texto-suave);margin-top:-2px;font-weight:600;}
-  .producto-precio{font-family:var(--font-display);font-size:18px;font-weight:800;color:var(--rojo-aji);line-height:1;letter-spacing:-0.02em;margin-top:auto;}
+.producto-unidad{font-family:var(--font-body);font-size:12px;color:#fff;background:var(--carbon);padding:2px 8px;border-radius:4px;display:inline-block;margin-top:4px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;}  .producto-precio{font-family:var(--font-display);font-size:18px;font-weight:800;color:var(--rojo-aji);line-height:1;letter-spacing:-0.02em;margin-top:auto;}
   .producto-precio small{font-size:11px;color:var(--texto-suave);font-family:var(--font-body);font-weight:500;letter-spacing:0;}
   .producto-rango{font-size:10px;color:var(--texto-muy-suave);font-weight:600;line-height:1.3;margin-top:1px;}
   @media (min-width:640px){.producto-nombre{font-size:14.5px;}.producto-unidad{font-size:15px;margin-top:-4px;}.producto-precio{font-size:22px;}.producto-precio small{font-size:11.5px;}.producto-rango{font-size:11px;}}
@@ -126,7 +125,7 @@
   .qty-input{flex:1;width:100%;min-width:0;border:none;background:transparent;outline:none;font-size:15px;font-weight:700;text-align:right;color:var(--carbon);padding:4px 0;font-family:var(--font-display);}
   @media (min-width:640px){.qty-input{font-size:16px;}}
   .qty-input::placeholder{color:#C9B79F;font-weight:500;font-family:var(--font-body);}
-  .qty-wrap .unit{font-size:11.5px;font-weight:700;color:var(--texto-suave);flex-shrink:0;padding-right:2px;font-family:var(--font-hand);}
+.qty-wrap .unit{font-size:13px;font-weight:800;color:var(--carbon);flex-shrink:0;padding-right:4px;font-family:var(--font-body);text-transform:uppercase;}
   @media (min-width:640px){.qty-wrap .unit{font-size:12.5px;}}
   .qty-input:disabled{opacity:.5;cursor:not-allowed;}
 
@@ -1181,11 +1180,11 @@ function renderCatalogo(){
         <div class="producto ${enCarrito ? 'en-carrito' : ''}" data-codigo="${p.codigo}">
           <div class="producto-foto" style="${fotoStyle}"></div>
           <div class="producto-contenido">
-            <div>
+                  <div>
               <div class="producto-nombre">${escapar(p.nombre)}</div>
-              <div class="producto-unidad">${escapar(p.unidad)}</div>
+              <div class="producto-unidad">${p.unidad === 'unidad' ? 'unidad' : p.unidad === 'atado' ? 'atado' : 'por kg'}</div>
             </div>
-            <div class="producto-precio">${soles(p.precio)} <small>/ ${escapar(p.unidad)}</small></div>
+            <div class="producto-precio">${soles(p.precio)} <small style="font-weight:700; color:var(--carbon);">/ ${p.unidad === 'unidad' ? 'unid' : p.unidad === 'atado' ? 'atado' : 'kg'}</small></div>
             ${rangoTxt ? `<div class="producto-rango">${rangoTxt}</div>` : ''}
             <div class="qty-wrap">
               <label for="qty-${p.codigo}">Cant.</label>
@@ -1193,7 +1192,7 @@ function renderCatalogo(){
                 data-qty="${p.codigo}" inputmode="decimal" autocomplete="off" spellcheck="false"
                 placeholder="0" value="${qty > 0 ? qty : ''}"
                 aria-label="Cantidad de ${escapar(p.nombre)}">
-              <span class="unit">${escapar(p.unidad)}</span>
+                <span class="unit">${p.unidad === 'unidad' ? 'unid' : p.unidad === 'atado' ? 'atado' : 'kg'}</span>
             </div>
             ${presetsHTML}
           </div>

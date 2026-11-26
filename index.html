@@ -420,6 +420,56 @@
   .metodo-pago label.activo{background:var(--carbon);color:var(--crema);}
   .metodo-pago input{display:none;}
   @media (max-width:380px){.wrap{padding:0 12px;}.hero{padding:14px 0 20px;}.hero-datos{grid-template-columns:1fr;}.hero-dato:last-child{grid-column:auto;}section{padding:36px 0;}.productos-grid{gap:8px;}.producto-contenido{padding:8px 8px 10px;}.producto-nombre{font-size:12.5px;}.producto-precio{font-size:16px;}.cart-bar{padding:9px 8px 9px 14px;}.cart-bar-info{font-size:12px;gap:6px;}.cart-bar-total{font-size:13px;}.cart-bar-cta{padding:7px 12px;font-size:12px;}.drawer-head h3{font-size:16px;}.drawer-body{padding:14px;}.drawer-foot{padding:10px 14px calc(10px + env(safe-area-inset-bottom));}}
+
+  /* ══════════════════════════════════════════════════════════
+     PRODUCTO NO DISPONIBLE (desactivado en admin)
+     ══════════════════════════════════════════════════════════ */
+  .producto.no-disponible{cursor:not-allowed;}
+
+  .producto.no-disponible::before{
+    content:'NO DISPONIBLE';
+    position:absolute;
+    top:14px;left:-34px;right:-34px;
+    background:#c04a30;
+    color:#fff;
+    text-align:center;
+    padding:5px 0;
+    font-family:var(--font-display);
+    font-weight:800;
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    transform:rotate(-8deg);
+    z-index:3;
+    border-top:2px solid var(--carbon);
+    border-bottom:2px solid var(--carbon);
+    box-shadow:0 2px 8px rgba(38,55,43,.25);
+    pointer-events:none;
+  }
+  .producto.no-disponible .producto-foto{filter:grayscale(.9) brightness(.85);}
+  .producto.no-disponible .producto-precio{text-decoration:line-through;color:var(--texto-muy-suave);}
+  .producto.no-disponible .producto-rango{display:none;}
+  .producto.no-disponible .qty-wrap,
+  .producto.no-disponible .qty-presets{display:none;}
+  .producto.no-disponible:hover{transform:none;box-shadow:2px 2px 0 var(--carbon);}
+
+  .producto-aviso{display:none;}
+  .producto.no-disponible .producto-aviso{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    margin-top:auto;
+    padding:8px 10px;
+    background:var(--crema-2);
+    border:2px solid var(--carbon);
+    border-radius:var(--radio-sm);
+    font-size:11px;
+    font-weight:700;
+    color:var(--texto-suave);
+    text-transform:uppercase;
+    letter-spacing:.05em;
+    line-height:1.2;
+  }
 </style>
 </head>
 <body>
@@ -690,6 +740,7 @@ const fdb = getFirestore(firebaseApp);
 let rondaActivaId = null;
 let unsubPrecios  = null;
 let unsubPedido   = null;
+let disponibilidadProductos = {}; /* ← NUEVO: Mapa de productos activos/inactivos */
 let estadoPedido  = { estado:'borrador', version:0, ronda:null, fecha:null, telefono:null };
 const LS_PEDIDO_ESTADO = 'misti_pedido_estado';
 
@@ -913,9 +964,12 @@ function deducirZonaSync(direccion){
   return { distrito:'', zona:'A', origen:'fallback' };
 }
 
+/* ══════════════════════════════════════════════════════════════
+   FIX: itemsCarrito ahora filtra productos NO DISPONIBLES
+   ══════════════════════════════════════════════════════════════ */
 function itemsCarrito(){
   return Object.entries(carrito)
-    .filter(([_,v]) => v.qty > 0)
+    .filter(([cod,v]) => v.qty > 0 && disponibilidadProductos[cod] !== false)
     .map(([cod,v]) => {
       const p = getProducto(cod);
       if (!p) return null;
@@ -940,12 +994,10 @@ function calcularDistanciaKm(){
   const c = 2*Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
   return R*c;
 }
-/* ── NUEVO: bandera para saber si el delivery se coordina ── */
 let deliveryPorCoordinar = false;
 let motivoCoordinacion   = '';
 
 function costoDelivery(){
-  // Reiniciamos la bandera en cada cálculo
   deliveryPorCoordinar = false;
   motivoCoordinacion   = '';
 
@@ -955,24 +1007,20 @@ function costoDelivery(){
   const distancia = calcularDistanciaKm();
   const cfg       = CONFIG_DELIVERY.pie;
 
-  // Sin coordenadas todavía: usar tarifa mínima, no bloquear
   if (distancia === null) return cfg.tarifasDistancia[0].costo;
 
-  // Fuera de cobertura → NO se bloquea, se deriva a coordinación por WhatsApp
   if (distancia > cfg.maxDistancia){
     deliveryPorCoordinar = true;
     motivoCoordinacion   = `distancia (${distancia.toFixed(2)} km > ${cfg.maxDistancia} km)`;
     return 0;
   }
 
-  // Excede peso → NO se bloquea, se deriva a coordinación por WhatsApp
   if (peso > cfg.maxPeso){
     deliveryPorCoordinar = true;
     motivoCoordinacion   = `peso (${peso.toFixed(2)} kg > ${cfg.maxPeso} kg)`;
     return 0;
   }
 
-  // Todo dentro de rango → tarifa normal
   let tarifaBase = 0;
   for (const r of cfg.tarifasDistancia){ if (distancia <= r.maxKm){ tarifaBase = r.costo; break; } }
   let recargoPeso = 0;
@@ -1185,6 +1233,9 @@ async function actualizarCoordsDesdePin(lat, lng){
   actualizarBotonConfirmar();
 }
 
+/* ══════════════════════════════════════════════════════════════
+   FIX: renderCatalogo con lógica de NO DISPONIBLES
+   ══════════════════════════════════════════════════════════════ */
 function renderCatalogo(){
   const cont = $('catalogoCont');
   if (!cont) return;
@@ -1206,28 +1257,30 @@ function renderCatalogo(){
     grupos[g].forEach(p => {
       const qty = (carrito[p.codigo] && carrito[p.codigo].qty) || 0;
       const enCarrito = qty > 0;
+      const disponible = disponibilidadProductos[p.codigo] !== false;
       const fotoStyle = `--foto-url:url('${encodeURI(p.foto)}');`;
       const rangoTxt = (p.unidad === 'kg') ? 'Rango: 0.9 – 1.1 kg' : '';
-      // Botones rápidos: kg → ¼ / ½ / 1 kg · unidad/atado → 1 / 2 / 3
+      const dis = (bloqueado || !disponible) ? 'disabled' : '';
+
       let presetsHTML = '';
       if (p.unidad === 'kg') {
         presetsHTML = `
           <div class="qty-presets" data-presets="${p.codigo}">
-            <button type="button" data-preset="0.25" data-codigo="${p.codigo}" ${bloqueado?'disabled':''}>¼ kg</button>
-            <button type="button" data-preset="0.5"  data-codigo="${p.codigo}" ${bloqueado?'disabled':''}>½ kg</button>
-            <button type="button" data-preset="1"    data-codigo="${p.codigo}" ${bloqueado?'disabled':''}>1 kg</button>
+            <button type="button" data-preset="0.25" data-codigo="${p.codigo}" ${dis}>¼ kg</button>
+            <button type="button" data-preset="0.5"  data-codigo="${p.codigo}" ${dis}>½ kg</button>
+            <button type="button" data-preset="1"    data-codigo="${p.codigo}" ${dis}>1 kg</button>
           </div>`;
            } else if (p.unidad === 'unidad' || p.unidad === 'atado') {
         const txtUnid = p.unidad === 'unidad' ? 'unid' : 'atado';
         presetsHTML = `
           <div class="qty-presets" data-presets="${p.codigo}">
-            <button type="button" data-preset="1" data-codigo="${p.codigo}" ${bloqueado?'disabled':''}>1 ${txtUnid}</button>
-            <button type="button" data-preset="2" data-codigo="${p.codigo}" ${bloqueado?'disabled':''}>2 ${txtUnid}</button>
-            <button type="button" data-preset="3" data-codigo="${p.codigo}" ${bloqueado?'disabled':''}>3 ${txtUnid}</button>
+            <button type="button" data-preset="1" data-codigo="${p.codigo}" ${dis}>1 ${txtUnid}</button>
+            <button type="button" data-preset="2" data-codigo="${p.codigo}" ${dis}>2 ${txtUnid}</button>
+            <button type="button" data-preset="3" data-codigo="${p.codigo}" ${dis}>3 ${txtUnid}</button>
           </div>`;
       }
       html += `
-        <div class="producto ${enCarrito ? 'en-carrito' : ''}" data-codigo="${p.codigo}">
+        <div class="producto ${enCarrito ? 'en-carrito' : ''} ${!disponible ? 'no-disponible' : ''}" data-codigo="${p.codigo}">
           <div class="producto-foto" style="${fotoStyle}"></div>
           <div class="producto-contenido">
             <div>
@@ -1237,13 +1290,14 @@ function renderCatalogo(){
             ${rangoTxt ? `<div class="producto-rango">${rangoTxt}</div>` : ''}
             <div class="qty-wrap">
               <label for="qty-${p.codigo}">Cant.</label>
-              <input type="text" class="qty-input" id="qty-${p.codigo}" ${bloqueado ? 'disabled' : ''}
+              <input type="text" class="qty-input" id="qty-${p.codigo}" ${dis}
                 data-qty="${p.codigo}" inputmode="decimal" autocomplete="off" spellcheck="false"
                 placeholder="0" value="${qty > 0 ? qty : ''}"
                 aria-label="Cantidad de ${escapar(p.nombre)}">
                 <span class="unit">${p.unidad === 'unidad' ? 'unid' : p.unidad === 'atado' ? 'atado' : 'kg'}</span>
             </div>
             ${presetsHTML}
+            <div class="producto-aviso">⚠ No disponible esta ronda</div>
           </div>
         </div>`;
     });
@@ -1258,6 +1312,7 @@ function bindQtyInputs(){
   document.querySelectorAll('[data-qty]').forEach(inp => {
     inp.addEventListener('input', () => {
       if (pedidoBloqueado()) return;
+      if (disponibilidadProductos[inp.dataset.qty] === false) return;
       const antes = inp.value;
       const filtrado = filtrarCantidad(antes);
       if (filtrado !== antes){
@@ -1277,6 +1332,7 @@ function bindQtyInputs(){
     });
     inp.addEventListener('blur', () => {
       if (pedidoBloqueado()) return;
+      if (disponibilidadProductos[inp.dataset.qty] === false) return;
       const codigo = inp.dataset.qty;
       const n = normalizarCantidad(inp.value);
       if (n !== null){ inp.value = n; carrito[codigo] = { qty: n }; marcarCard(codigo, true); }
@@ -1289,6 +1345,7 @@ function bindQtyInputs(){
     inp.addEventListener('keydown', (e) => { if (e.key === 'Enter'){ e.preventDefault(); inp.blur(); } });
     inp.addEventListener('keypress', (e) => {
       if (pedidoBloqueado()){ e.preventDefault(); return; }
+      if (disponibilidadProductos[inp.dataset.qty] === false){ e.preventDefault(); return; }
       const key = e.key;
       if (e.ctrlKey || e.metaKey || e.altKey) return;
       if (key.length > 1) return;
@@ -1302,6 +1359,7 @@ function bindPresets(){
   document.querySelectorAll('[data-preset]').forEach(btn => {
     btn.addEventListener('click', () => {
       if (pedidoBloqueado()) return;
+      if (disponibilidadProductos[btn.dataset.codigo] === false) return;
       const codigo = btn.dataset.codigo;
       const valor  = parseFloat(btn.dataset.preset);
       if (isNaN(valor) || valor <= 0) return;
@@ -2066,13 +2124,6 @@ function renderBannerPedido(){
 
 /* ============================================================
    FIREBASE — PRECIOS DE LA RONDA
-   El cliente toma TODOS los datos de Firestore:
-     - P_L_final  (S/ por unidad de venta, lo correcto del admin)
-     - equiv_kg   (peso real de la unidad, lo define el admin)
-   Si P_L_final viene en S//kg (bug de versiones viejas del admin),
-   lo detectamos y convertimos usando el equiv_kg de Firestore.
-   El array PRODUCTOS es solo un fallback inicial (mientras
-   Firestore responde por primera vez).
    ============================================================ */
 function initFirebaseRonda(){
   rondaActivaId = getRondaId();
@@ -2085,20 +2136,12 @@ function initFirebaseRonda(){
         const p = getProducto(cod);
         if (!p) return;
 
-        // ------------------------------------------------------------
-        // 1) SINCRONIZAR equiv_kg DESDE FIRESTORE (fuente de verdad)
-        // ------------------------------------------------------------
         const eqFs = Number(data.equiv_kg);
         if (!isNaN(eqFs) && eqFs > 0 && p.equiv_kg !== eqFs){
           p.equiv_kg = eqFs;
           huboCambios = true;
         }
 
-        // ------------------------------------------------------------
-        // 2) SINCRONIZAR PRECIO DESDE FIRESTORE
-        // P_L_final viene en S/ por unidad de venta (correcto del admin).
-        // Si viene en S//kg (bug viejo), convertimos con equiv_kg de Firestore.
-        // ------------------------------------------------------------
         const plFinal   = Number(data.P_L_final); // En Admin esto es S/ por KG
         const plMercado = Number(data.P_L_mercado); // En Admin esto es S/ por UNIDAD
 
@@ -2106,14 +2149,10 @@ function initFirebaseRonda(){
         const eq = p.equiv_kg || 1; // El peso del atado (ej: 0.3 para el apio)
 
         if (!isNaN(plFinal) && plFinal > 0){
-          // Como el P_L_final está en kilos, lo multiplicamos por el peso.
-          // Ejemplo Apio: 14.40 * 0.3 = 4.32
           precioFinal = +(plFinal * eq).toFixed(2);
         } else if (!isNaN(plMercado) && plMercado > 0){
-          // Si no hay P_L_final, usamos el de mercado (que ya está en unidades).
           precioFinal = plMercado;
         }
-       
 
         if (precioFinal != null && precioFinal > 0 && p.precio !== precioFinal){
           p.precio = precioFinal;
@@ -2128,6 +2167,39 @@ function initFirebaseRonda(){
     }, err => console.warn('precios:', err && err.code, err && err.message));
   }catch(e){
     console.warn('No se pudo escuchar los precios:', e);
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   FIX: LISTENER DE DISPONIBILIDAD (catalogo/productos/items)
+   ══════════════════════════════════════════════════════════════ */
+function initDisponibilidadProductos(){
+  try {
+    onSnapshot(collection(fdb, "catalogo", "productos", "items"), (snap) => {
+      disponibilidadProductos = {};
+      snap.forEach(docSnap => {
+        const d = docSnap.data();
+        disponibilidadProductos[docSnap.id] = d.activo !== false;
+      });
+
+      // Auto-eliminar del carrito los productos que se acaban de desactivar
+      let cambio = false;
+      Object.keys(carrito).forEach(cod => {
+        if (disponibilidadProductos[cod] === false) {
+          delete carrito[cod];
+          cambio = true;
+        }
+      });
+      if (cambio) {
+        guardar(LS_CARRITO, carrito);
+        renderCartBar();
+        if ($('drawer') && $('drawer').classList.contains('open')) renderDrawer();
+      }
+
+      renderCatalogo();
+    }, err => console.warn('disponibilidad:', err && err.code, err && err.message));
+  } catch(e){
+    console.warn('No se pudo escuchar disponibilidad:', e);
   }
 }
 
@@ -2229,6 +2301,7 @@ function init(){
   });
 
   initFirebaseRonda();
+  initDisponibilidadProductos();
   escucharPedido();
 }
 

@@ -2983,7 +2983,7 @@ function cvCard(item, kind) {
   const desc = cvEsc(item.descripcion || "");
   const detail = kind === "recipe"
     ? `<button class="btn recipe-btn" type="button" data-cv-recipe="${cvEsc(item.id)}">Ver receta y kit</button>`
-    : (cvUrl(item.link) ? `<a class="btn" href="${cvEsc(cvUrl(item.link))}" target="_blank" rel="noopener noreferrer">Ver recurso ↗</a>` : "");
+    : (cvUrl(item.recurso || item.link) ? `<a class="btn" href="${cvEsc(cvUrl(item.recurso || item.link))}" target="_blank" rel="noopener noreferrer">Ver recurso ↗</a>` : "");
   return `<article class="card"><img src="${cvEsc(img)}" alt="${title}" loading="lazy"><div class="cardbody"><span class="tag">${category}</span><h3>${title}</h3><p>${desc}</p><div class="meta">${category}</div>${detail}</div></article>`;
 }
 function cvRenderGuides(items) {
@@ -3031,8 +3031,8 @@ document.addEventListener("click", e => {
 });
 async function cvLoadPublic() {
   const [guideSnap, recipeSnap] = await Promise.all([
-    getDocs(collection(cvDb, "cestaverde_conserva")),
-    getDocs(collection(cvDb, "cestaverde_recetas"))
+    getDocs(collection(cvDb, "cestaverde", "contenido", "conservacion")),
+    getDocs(collection(cvDb, "cestaverde", "contenido", "recetas"))
   ]);
   const guides = guideSnap.docs.map(d => ({id:d.id,...d.data()}))
     .filter(x => x.publicado === true).sort((a,b)=>(Number(a.orden)||0)-(Number(b.orden)||0));

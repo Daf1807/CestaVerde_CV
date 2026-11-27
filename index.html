@@ -3030,23 +3030,40 @@ document.addEventListener("click", e => {
   if (btn) cvOpenRecipe(btn.dataset.cvRecipe);
 });
 async function cvLoadPublic() {
-  const [guideSnap, recipeSnap] = await Promise.all([
-    getDocs(collection(cvDb, "cestaverde", "contenido", "conservacion")),
-    getDocs(collection(cvDb, "cestaverde", "contenido", "recetas"))
-  ]);
-  const guides = guideSnap.docs.map(d => ({id:d.id,...d.data()}))
-    .filter(x => x.publicado === true).sort((a,b)=>(Number(a.orden)||0)-(Number(b.orden)||0));
-  cvPublicRecipes = recipeSnap.docs.map(d => ({id:d.id,...d.data()}))
-    .filter(x => x.publicado === true).sort((a,b)=>(Number(a.orden)||0)-(Number(b.orden)||0));
-  cvRenderGuides(guides);
-  cvRenderRecipes(cvPublicRecipes);
+  try {
+    const [guideSnap, recipeSnap] = await Promise.all([
+      getDocs(collection(cvDb, "cestaverde_conserva")),
+      getDocs(collection(cvDb, "cestaverde_recetas"))
+    ]);
+
+    const guides = guideSnap.docs
+      .map(d => ({ id: d.id, ...d.data() }))
+      .filter(x => x.publicado === true)
+      .sort((a, b) => (Number(a.orden) || 0) - (Number(b.orden) || 0));
+
+    cvPublicRecipes = recipeSnap.docs
+      .map(d => ({ id: d.id, ...d.data() }))
+      .filter(x => x.publicado === true)
+      .sort((a, b) => (Number(a.orden) || 0) - (Number(b.orden) || 0));
+
+    cvRenderGuides(guides);
+    cvRenderRecipes(cvPublicRecipes);
+
+    console.log("CestaVerde: contenido cargado correctamente", {
+      consejos: guides.length,
+      recetas: cvPublicRecipes.length
+    });
+
+  } catch (err) {
+    console.error("Error cargando contenido CestaVerde:", err);
+    throw err;
+  }
 }
+
 cvLoadPublic().catch(err => {
-  console.error("No se pudo cargar el contenido CestaVerde desde Firestore:", err);
-  const g = document.getElementById("cvConservaGrid");
-  const r = document.getElementById("cvRecetasMistiGrid");
-  if (g) g.innerHTML = '<p class="meta">No pudimos cargar los consejos en este momento. Intenta nuevamente más tarde.</p>';
-  if (r) r.innerHTML = '<p class="meta">No pudimos cargar las recetas en este momento. Intenta nuevamente más tarde.</p>';
+  console.error("No se pudo cargar el contenido CestaVerde:", err);
+
+  // Mostrar error en las secciones correspondientes
 });
 </script>
 

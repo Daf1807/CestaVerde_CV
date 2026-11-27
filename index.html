@@ -874,6 +874,15 @@ body.recipe-modal-open { overflow:hidden; }
 </style>
 
 <style id="cestaverde-reels-integrados">
+.cv-guide-videos{margin:14px 0 8px;min-width:0}
+.cv-guide-videos-title{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:0 0 8px;font-size:13px;font-weight:800;color:#315b3e}
+.cv-guide-videos-title span{font-size:10px;font-weight:600;color:#718176;white-space:nowrap}
+.cv-guide-video-track{display:flex;gap:12px;overflow-x:auto;overflow-y:hidden;padding:2px 2px 12px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;overscroll-behavior-inline:contain;touch-action:pan-x;scrollbar-width:thin}
+.cv-guide-video-item{flex:0 0 190px;min-width:0;scroll-snap-align:start}
+.cv-guide-reel{width:100%;max-width:none;aspect-ratio:9/16;margin:0 0 4px;border-radius:13px}
+.cv-guide-video-item .cv-video-fallback{margin:3px 0 0}
+@media(min-width:761px){.cv-guide-video-item{flex-basis:190px}}
+
 .cv-reel-frame{position:relative;width:min(100%,420px);aspect-ratio:9/16;margin:14px auto;overflow:hidden;border-radius:18px;background:#101510;box-shadow:0 8px 24px rgba(20,35,25,.12)}
 .cv-reel-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 .cv-guide-reel{width:min(100%,260px);margin:12px 0 4px;border-radius:14px}
@@ -3015,9 +3024,11 @@ function cvCard(item, kind) {
   const category = cvEsc(item.categoria || (kind === 'recipe' ? 'Receta' : 'Consejo'));
   const desc = cvEsc(item.descripcion || '');
   const resourceUrl = cvUrl(item.video || item.recurso || item.link);
+  const rawGuideVideos = Array.isArray(item.videos) && item.videos.length ? item.videos : (resourceUrl ? [resourceUrl] : []);
+  const guideVideos = kind === 'guide' ? rawGuideVideos.map(v => cvUrl(typeof v === 'string' ? v : (v.url || v.link || v.video))).filter(Boolean).map(url => ({url,id:cvVideoId(url)})).filter(v => v.id) : [];
   const videoId = cvVideoId(resourceUrl);
-  const videoPreview = kind === 'guide' && videoId ? `${cvYouTubeFrame(videoId, item.titulo || 'Video de conservación', 'cv-guide-reel')}<a class="cv-video-fallback" href="${cvEsc(resourceUrl)}" target="_blank" rel="noopener noreferrer">Abrir video en YouTube ↗</a>` : '';
-  const detail = kind === 'recipe' ? `<button class="btn recipe-btn" type="button" data-cv-recipe="${cvEsc(item.id)}">Ver receta y kit</button>` : (!videoId && resourceUrl ? `<a class="btn" href="${cvEsc(resourceUrl)}" target="_blank" rel="noopener noreferrer">Ver recurso ↗</a>` : '');
+  const videoPreview = kind === 'guide' && guideVideos.length ? `<section class="cv-guide-videos" aria-label="Videos sobre ${title}"><div class="cv-guide-videos-title">🎬 Videos sobre este alimento <span>Desliza para ver más</span></div><div class="cv-guide-video-track">${guideVideos.map((v,i)=>`<div class="cv-guide-video-item">${cvYouTubeFrame(v.id, `${item.titulo || 'Conservación'} · Video ${i+1}`, 'cv-guide-reel')}<a class="cv-video-fallback" href="${cvEsc(v.url)}" target="_blank" rel="noopener noreferrer">Ver en YouTube ↗</a></div>`).join('')}</div></section>` : '';
+  const detail = kind === 'recipe' ? `<button class="btn recipe-btn" type="button" data-cv-recipe="${cvEsc(item.id)}">Ver receta y kit</button>` : (!guideVideos.length && !videoId && resourceUrl ? `<a class="btn" href="${cvEsc(resourceUrl)}" target="_blank" rel="noopener noreferrer">Ver recurso ↗</a>` : '');
   return `<article class="card"><img src="${cvEsc(img)}" alt="${title}" loading="lazy"><div class="cardbody"><span class="tag">${category}</span><h3>${title}</h3><p>${desc}</p>${videoPreview}<div class="meta">${category}</div>${detail}</div></article>`;
 }
 function cvRenderGuides(items) {

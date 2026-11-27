@@ -471,6 +471,408 @@
     line-height:1.2;
   }
 </style>
+<style>
+
+/* Navegación y estilos de las secciones de contenido */
+.site-subnav{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;padding:9px 12px;background:#fffdf7;border-bottom:1px solid #e8e7db;position:relative;z-index:40}
+.site-subnav a{font-size:12px;font-weight:700;color:#5a6b58;padding:7px 12px;border-radius:999px}
+.site-subnav a:hover{background:#e3eee1;color:#23533a}
+#conservacion,#cocina{scroll-margin-top:110px}
+
+:root{--forest:#163c2b;--leaf:#477b4d;--leaf2:#23533a;--gold:#e8b94d;--mint:#e3eee1;--cream:#f7f4e9;--paper:#fffdf7;--ink:#26372b;--muted:#5a6b58;--line:#e8e7db;--display:'Bricolage Grotesque',Georgia,serif;--body:'Inter',Arial,sans-serif}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--cream);color:var(--ink);font:15px/1.6 var(--body)}img{display:block;width:100%;object-fit:cover}a{color:inherit;text-decoration:none}button{font:inherit;cursor:pointer;border:0}h1,h2,h3{font-family:var(--display);line-height:1.1;letter-spacing:-.03em;margin:0 0 12px}p{margin:0 0 14px}.wrap{width:min(1120px,calc(100% - 36px));margin:auto}.top{background:var(--forest);color:white;text-align:center;padding:8px 12px;font-size:12px}.nav{position:sticky;top:0;z-index:20;background:#f7f4e9f2;backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}.navin{height:68px;display:flex;align-items:center;justify-content:space-between;gap:18px}.brand{font:800 23px var(--display);color:var(--leaf2)}.brand span{color:var(--gold)}.links{display:flex;gap:24px;align-items:center;font-size:13px;font-weight:700;color:var(--muted)}.links a:hover,.links a.active{color:var(--leaf)}.cta,.btn{display:inline-flex;align-items:center;justify-content:center;background:var(--leaf);color:#fff;border:2px solid var(--ink);border-radius:999px;padding:11px 18px;font-weight:700;box-shadow:2px 2px 0 var(--ink);transition:.2s}.cta:hover,.btn:hover{transform:translateY(-2px);background:var(--leaf2)}.btn.light{background:var(--paper);color:var(--ink)}.subnav{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;padding:9px 12px;background:var(--paper);border-bottom:1px solid var(--line)}.subnav a{font-size:12px;font-weight:700;color:var(--muted);padding:7px 12px;border-radius:999px}.subnav a.active,.subnav a:hover{background:var(--mint);color:var(--leaf2)}.hero{padding:58px 0 52px}.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:42px;align-items:center}.eyebrow{text-transform:uppercase;letter-spacing:.14em;color:var(--leaf);font-size:11px;font-weight:800;margin-bottom:14px}.hero h1{font-size:clamp(38px,6vw,66px);color:var(--forest)}.hero p{font-size:17px;color:var(--muted);max-width:54ch}.hero img{height:390px;border-radius:28px;box-shadow:8px 8px 0 var(--gold)}.section{padding:48px 0}.head{max-width:680px;margin-bottom:26px}.head h2{font-size:clamp(28px,4vw,42px)}.head p{color:var(--muted)}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}.card{background:var(--paper);border:1px solid var(--line);border-radius:20px;overflow:hidden;box-shadow:0 8px 24px #26372b0b}.card img{height:205px}.cardbody{padding:19px}.tag{display:inline-block;color:var(--leaf2);background:var(--mint);font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:5px 9px;border-radius:999px;margin-bottom:10px}.card h3{font-size:23px}.card p{color:var(--muted);font-size:13px}.meta{font-size:11px;color:var(--muted);margin:12px 0}.card .btn{width:100%;font-size:12px;padding:10px}.split{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:center}.feature{background:var(--mint);border-radius:24px;padding:30px}.feature h2{font-size:32px}.feature p{color:var(--muted)}.tips{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.tip{padding:18px;background:var(--paper);border:1px solid var(--line);border-radius:16px}.tip b{display:block;margin-bottom:5px}.tip p{font-size:13px;color:var(--muted);margin:0}.video{position:relative;display:block;border-radius:18px;overflow:hidden;background:var(--forest);min-height:190px}.video img{height:190px;opacity:.78}.play{position:absolute;inset:0;display:grid;place-items:center;color:white;font-size:42px;text-shadow:0 2px 10px #000}.recipe-detail{display:none;background:var(--paper);border:1px solid var(--line);border-radius:22px;padding:24px;margin-top:22px}.recipe-detail.open{display:block}.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}.recipe-detail img{height:280px;border-radius:16px}.ingredients li,.steps li{margin:7px 0;color:var(--muted)}.kit{background:#f3edda;border:1px solid #e5d9b5;border-radius:16px;padding:18px;margin-top:16px}.kit h4{margin:0 0 8px;font-family:var(--display);font-size:20px}.kit ul{margin:8px 0 14px;padding-left:20px;color:var(--muted);font-size:13px}.note{font-size:11px;color:var(--muted);margin-top:10px}.footer{background:var(--forest);color:#f7f4e9;padding:35px 0;margin-top:50px}.footer p{color:#d7e2d5;font-size:13px}.footergrid{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}.footer .brand{color:white}.footer small{color:#c6d5c4}
+@media(max-width:760px){.links{display:none}.hero{padding:35px 0}.hero-grid,.split,.detail-grid{grid-template-columns:1fr}.hero img{height:260px}.grid{grid-template-columns:repeat(2,1fr)}.tips{grid-template-columns:1fr}.section{padding:35px 0}}
+@media(max-width:500px){.grid{grid-template-columns:1fr}.card img{height:220px}.navin{height:60px}.cta{font-size:11px;padding:9px 12px}.hero h1{font-size:42px}}
+
+
+:root{--forest:#163c2b;--leaf:#477b4d;--leaf2:#23533a;--gold:#e8b94d;--mint:#e3eee1;--cream:#f7f4e9;--paper:#fffdf7;--ink:#26372b;--muted:#5a6b58;--line:#e8e7db;--display:'Bricolage Grotesque',Georgia,serif;--body:'Inter',Arial,sans-serif}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--cream);color:var(--ink);font:15px/1.6 var(--body)}img{display:block;width:100%;object-fit:cover}a{color:inherit;text-decoration:none}button{font:inherit;cursor:pointer;border:0}h1,h2,h3{font-family:var(--display);line-height:1.1;letter-spacing:-.03em;margin:0 0 12px}p{margin:0 0 14px}.wrap{width:min(1120px,calc(100% - 36px));margin:auto}.top{background:var(--forest);color:white;text-align:center;padding:8px 12px;font-size:12px}.nav{position:sticky;top:0;z-index:20;background:#f7f4e9f2;backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}.navin{height:68px;display:flex;align-items:center;justify-content:space-between;gap:18px}.brand{font:800 23px var(--display);color:var(--leaf2)}.brand span{color:var(--gold)}.links{display:flex;gap:24px;align-items:center;font-size:13px;font-weight:700;color:var(--muted)}.links a:hover,.links a.active{color:var(--leaf)}.cta,.btn{display:inline-flex;align-items:center;justify-content:center;background:var(--leaf);color:#fff;border:2px solid var(--ink);border-radius:999px;padding:11px 18px;font-weight:700;box-shadow:2px 2px 0 var(--ink);transition:.2s}.cta:hover,.btn:hover{transform:translateY(-2px);background:var(--leaf2)}.btn.light{background:var(--paper);color:var(--ink)}.subnav{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;padding:9px 12px;background:var(--paper);border-bottom:1px solid var(--line)}.subnav a{font-size:12px;font-weight:700;color:var(--muted);padding:7px 12px;border-radius:999px}.subnav a.active,.subnav a:hover{background:var(--mint);color:var(--leaf2)}.hero{padding:58px 0 52px}.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:42px;align-items:center}.eyebrow{text-transform:uppercase;letter-spacing:.14em;color:var(--leaf);font-size:11px;font-weight:800;margin-bottom:14px}.hero h1{font-size:clamp(38px,6vw,66px);color:var(--forest)}.hero p{font-size:17px;color:var(--muted);max-width:54ch}.hero img{height:390px;border-radius:28px;box-shadow:8px 8px 0 var(--gold)}.section{padding:48px 0}.head{max-width:680px;margin-bottom:26px}.head h2{font-size:clamp(28px,4vw,42px)}.head p{color:var(--muted)}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}.card{background:var(--paper);border:1px solid var(--line);border-radius:20px;overflow:hidden;box-shadow:0 8px 24px #26372b0b}.card img{height:205px}.cardbody{padding:19px}.tag{display:inline-block;color:var(--leaf2);background:var(--mint);font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:5px 9px;border-radius:999px;margin-bottom:10px}.card h3{font-size:23px}.card p{color:var(--muted);font-size:13px}.meta{font-size:11px;color:var(--muted);margin:12px 0}.card .btn{width:100%;font-size:12px;padding:10px}.split{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:center}.feature{background:var(--mint);border-radius:24px;padding:30px}.feature h2{font-size:32px}.feature p{color:var(--muted)}.tips{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.tip{padding:18px;background:var(--paper);border:1px solid var(--line);border-radius:16px}.tip b{display:block;margin-bottom:5px}.tip p{font-size:13px;color:var(--muted);margin:0}.video{position:relative;display:block;border-radius:18px;overflow:hidden;background:var(--forest);min-height:190px}.video img{height:190px;opacity:.78}.play{position:absolute;inset:0;display:grid;place-items:center;color:white;font-size:42px;text-shadow:0 2px 10px #000}.recipe-detail{display:none;background:var(--paper);border:1px solid var(--line);border-radius:22px;padding:24px;margin-top:22px}.recipe-detail.open{display:block}.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}.recipe-detail img{height:280px;border-radius:16px}.ingredients li,.steps li{margin:7px 0;color:var(--muted)}.kit{background:#f3edda;border:1px solid #e5d9b5;border-radius:16px;padding:18px;margin-top:16px}.kit h4{margin:0 0 8px;font-family:var(--display);font-size:20px}.kit ul{margin:8px 0 14px;padding-left:20px;color:var(--muted);font-size:13px}.note{font-size:11px;color:var(--muted);margin-top:10px}.footer{background:var(--forest);color:#f7f4e9;padding:35px 0;margin-top:50px}.footer p{color:#d7e2d5;font-size:13px}.footergrid{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}.footer .brand{color:white}.footer small{color:#c6d5c4}
+@media(max-width:760px){.links{display:none}.hero{padding:35px 0}.hero-grid,.split,.detail-grid{grid-template-columns:1fr}.hero img{height:260px}.grid{grid-template-columns:repeat(2,1fr)}.tips{grid-template-columns:1fr}.section{padding:35px 0}}
+@media(max-width:500px){.grid{grid-template-columns:1fr}.card img{height:220px}.navin{height:60px}.cta{font-size:11px;padding:9px 12px}.hero h1{font-size:42px}}
+
+</style>
+
+<style id="single-file-pages">
+  .page-view { display: none; }
+  .page-view.active { display: block; }
+  .site-subnav a.active { background: #e3eee1; color: #23533a; }
+</style>
+
+<style>
+.experiment-form{margin-top:24px;padding:22px;background:#fffdf7;border:1px solid #e8e7db;border-radius:20px;box-shadow:0 8px 24px #26372b0b}
+.experiment-form h3{font-size:23px}.experiment-fields{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.experiment-fields label{display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:700;color:#23533a}
+.experiment-fields input,.experiment-fields textarea{width:100%;padding:11px;border:1px solid #cdd4bd;border-radius:10px;background:#fff;font:inherit;font-size:13px;color:#26372b}
+.experiment-fields .wide{grid-column:1/-1}.experiment-entry{margin-top:14px;background:#fffdf7;border:1px solid #e8e7db;border-radius:14px;padding:16px}
+.experiment-entry img{max-height:240px;object-fit:cover;border-radius:10px;margin:10px 0}
+.recipe-video-note{padding:14px;background:#e3eee1;border-radius:12px;color:#5a6b58;font-size:13px;margin:14px 0}
+.kit-item-muted{opacity:.72}.kit-item-ready{font-weight:700;color:#23533a}
+@media(max-width:760px){.experiment-fields{grid-template-columns:1fr}.experiment-fields .wide{grid-column:auto}}
+</style>
+<style>
+/* Videos integrados y tarjetas de recetas */
+.guide-video-title{font-weight:800;color:var(--forest);font-size:13px;margin:16px 0 8px}.guide-video{position:relative;aspect-ratio:9/16;width:min(100%,360px);max-width:360px;margin:0 auto 8px;background:#17251d;border-radius:14px;overflow:hidden}.guide-video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}.guide-video-link{display:block;text-align:center;color:var(--leaf2);font-size:12px;font-weight:800;margin-top:8px}.video-gallery-single{grid-template-columns:minmax(0,760px)}.video-gallery{display:grid;grid-template-columns:minmax(220px,.72fr) minmax(0,1.5fr);gap:22px;align-items:start}
+.video-card{min-width:0;background:var(--paper);border:1px solid var(--line);border-radius:20px;overflow:hidden;box-shadow:0 8px 24px #26372b0b}
+.video-frame{position:relative;width:100%;background:#17251d;overflow:hidden}
+.video-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.video-vertical{aspect-ratio:9/16;max-height:560px}
+.video-horizontal{aspect-ratio:16/9}
+.video-caption{display:flex;flex-direction:column;padding:13px 16px;gap:2px}
+.video-caption span{font-size:12px;color:var(--muted)}
+.video-caption a,.recipe-youtube-link{display:inline-block;margin-top:7px;color:#245b3b;font-size:13px;font-weight:700;text-decoration:underline;text-underline-offset:3px}
+.recipe-youtube-link{margin:0 0 12px}
+.recipe-detail{scroll-margin-top:90px}
+.recipe-embed{position:relative;aspect-ratio:16/9;width:100%;margin:14px 0;border-radius:14px;overflow:hidden;background:#17251d}
+.recipe-embed iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.recipe-detail .detail-grid{align-items:start}
+.recipe-detail .detail-grid>div{min-width:0}
+.recipe-detail .ingredients,.recipe-detail .steps{padding-left:22px}
+.recipe-detail .kit{margin-top:18px}
+.recipe-btn{margin-top:8px}
+@media(max-width:760px){.video-gallery{grid-template-columns:1fr}.video-short{max-width:360px;margin:0 auto;width:100%}.video-horizontal{aspect-ratio:16/9}}
+</style>
+
+<style id="cestaverde-recetas-mobile-fix">
+/* Recetas: navegación contenida, sin saltos de página */
+#page-cocina #mistiGrid,
+#page-cocina #tambien .grid { align-items:stretch; }
+
+#page-cocina .recipe-detail {
+  display:none;
+  position:fixed;
+  z-index:220;
+  inset: max(14px, env(safe-area-inset-top)) 14px max(14px, env(safe-area-inset-bottom));
+  width:min(920px, calc(100vw - 28px));
+  max-height:calc(100dvh - 28px);
+  margin:auto;
+  padding:22px;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;
+  background:var(--paper, #fffdf7);
+  border:1px solid var(--line, #e8e7db);
+  border-radius:22px;
+  box-shadow:0 18px 70px rgba(15,35,23,.28);
+  scroll-margin:0;
+}
+#page-cocina .recipe-detail.open { display:block; }
+#page-cocina .recipe-detail.open::before {
+  content:"";
+  position:fixed;
+  z-index:-1;
+  inset:-100vh -100vw;
+  background:rgba(20,35,25,.62);
+  backdrop-filter:blur(3px);
+}
+#page-cocina #closeDetail {
+  position:sticky;
+  top:0;
+  z-index:3;
+  margin:-4px 0 10px;
+  box-shadow:0 4px 12px rgba(20,35,25,.12);
+}
+#page-cocina .recipe-detail .detail-grid { min-width:0; }
+#page-cocina .recipe-detail .detail-grid > div { min-width:0; }
+#page-cocina .recipe-embed { max-width:100%; }
+body.recipe-modal-open { overflow:hidden; }
+
+@media(max-width:760px) {
+  #page-cocina #mistiGrid,
+  #page-cocina #tambien .grid {
+    grid-template-columns:1fr;
+    gap:12px;
+  }
+  #page-cocina #mistiGrid .card,
+  #page-cocina #tambien .card {
+    display:grid;
+    grid-template-columns:112px minmax(0,1fr);
+    align-items:stretch;
+    min-height:132px;
+    border-radius:16px;
+  }
+  #page-cocina #mistiGrid .card > img,
+  #page-cocina #tambien .card > img {
+    width:112px;
+    height:100%;
+    min-height:132px;
+    object-fit:cover;
+  }
+  #page-cocina #mistiGrid .cardbody,
+  #page-cocina #tambien .cardbody {
+    min-width:0;
+    padding:12px;
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    gap:4px;
+  }
+  #page-cocina #mistiGrid .tag,
+  #page-cocina #tambien .tag {
+    margin:0 0 2px;
+    font-size:9px;
+    padding:4px 7px;
+  }
+  #page-cocina #mistiGrid .card h3,
+  #page-cocina #tambien .card h3 {
+    font-size:17px;
+    line-height:1.15;
+    margin:0;
+  }
+  #page-cocina #mistiGrid .card p,
+  #page-cocina #tambien .card p {
+    font-size:11.5px;
+    line-height:1.35;
+    margin:2px 0;
+    display:-webkit-box;
+    -webkit-line-clamp:2;
+    -webkit-box-orient:vertical;
+    overflow:hidden;
+  }
+  #page-cocina #mistiGrid .meta,
+  #page-cocina #tambien .meta {
+    font-size:10px;
+    margin:2px 0 4px;
+  }
+  #page-cocina #mistiGrid .card .btn,
+  #page-cocina #tambien .card .btn {
+    width:auto;
+    min-height:34px;
+    margin-top:auto;
+    padding:7px 11px;
+    font-size:11px;
+    white-space:normal;
+  }
+  #page-cocina .recipe-detail {
+    inset:0;
+    width:100%;
+    max-height:100dvh;
+    height:100dvh;
+    border:0;
+    border-radius:0;
+    padding:calc(12px + env(safe-area-inset-top)) 14px calc(18px + env(safe-area-inset-bottom));
+  }
+  #page-cocina .recipe-detail.open::before { display:none; }
+  #page-cocina #closeDetail {
+    top:0;
+    width:100%;
+    justify-content:flex-start;
+    border-radius:12px;
+    margin:0 0 14px;
+  }
+  #page-cocina .recipe-detail .detail-grid { gap:20px; }
+  #page-cocina .recipe-detail h2 { font-size:27px; line-height:1.12; }
+  #page-cocina .recipe-detail h3 { font-size:19px; margin:16px 0 8px; }
+  #page-cocina .recipe-detail .ingredients,
+  #page-cocina .recipe-detail .steps { padding-left:21px; }
+  #page-cocina .recipe-detail .kit { padding:14px; }
+}
+@media(max-width:360px) {
+  #page-cocina #mistiGrid .card,
+  #page-cocina #tambien .card { grid-template-columns:96px minmax(0,1fr); }
+  #page-cocina #mistiGrid .card > img,
+  #page-cocina #tambien .card > img { width:96px; }
+  #page-cocina #mistiGrid .cardbody,
+  #page-cocina #tambien .cardbody { padding:10px; }
+}
+</style>
+
+
+<style id="cestaverde-tienda-responsive-fix">
+/* Ajustes de la tienda: escritorio, tablet y móvil */
+#page-tienda { overflow-x: clip; }
+#page-tienda .wrap { width: min(100% - 32px, 1160px); }
+#page-tienda .hero { padding: clamp(28px, 5vw, 64px) 0 clamp(30px, 5vw, 58px); }
+#page-tienda .hero-grid {
+  display:grid;
+  grid-template-columns:minmax(0,1fr);
+  gap:28px;
+  align-items:center;
+}
+#page-tienda .hero-grid > div:first-child { min-width:0; }
+#page-tienda .hero h1 { max-width: 14ch; font-size:clamp(34px,5.2vw,58px); }
+#page-tienda .hero-lede { max-width:58ch; }
+#page-tienda .hero-ilu {
+  display:none;
+  width:min(100%,390px);
+  max-width:390px;
+  aspect-ratio:1 / 1;
+  height:auto;
+  justify-self:center;
+  margin-inline:auto;
+}
+#page-tienda .hero-ilu-marco { width:100%; height:100%; }
+#page-tienda .reloj-ronda { width:min(100%,520px); }
+#page-tienda .reloj-tiempo {
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  align-items:baseline;
+  justify-content:stretch;
+  gap:3px;
+  width:100%;
+  white-space:nowrap;
+}
+#page-tienda .reloj-par {
+  display:flex;
+  justify-content:center;
+  align-items:baseline;
+  margin:0;
+  min-width:0;
+}
+#page-tienda .reloj-num { font-size:clamp(27px,4.2vw,46px); }
+#page-tienda .reloj-unit { font-size:.38em; margin-left:2px; }
+#page-tienda #catalogo { scroll-margin-top:78px; }
+#page-tienda #catalogo > .wrap { padding-top:clamp(34px,5vw,58px); padding-bottom:clamp(38px,5vw,64px); }
+#page-tienda .section-head { max-width:760px; }
+#page-tienda .como-armar { max-width:900px; }
+#page-tienda .ronda-banner { max-width:1000px; }
+#page-tienda #catalogoCont { min-width:0; }
+#page-tienda .productos-grid {
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+}
+#page-tienda .producto { min-width:0; }
+#page-tienda .producto-foto { aspect-ratio: 1 / .88; }
+#page-tienda .producto-contenido { min-width:0; }
+#page-tienda .producto-nombre { overflow-wrap:anywhere; }
+#page-tienda .hero-actions { display:flex; flex-wrap:wrap; gap:12px; }
+#page-tienda .hero-actions .btn { flex:0 1 auto; }
+@media (min-width:640px) {
+  #page-tienda .wrap { width:min(100% - 52px,1160px); }
+  #page-tienda .reloj-tiempo { gap:5px; }
+  #page-tienda .reloj-num { font-size:clamp(32px,4vw,48px); }
+  #page-tienda .productos-grid { grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:16px; }
+}
+@media (min-width:900px) {
+  #page-tienda .wrap { width:min(100% - 68px,1160px); }
+  #page-tienda .hero-grid {
+    grid-template-columns:minmax(0,1.12fr) minmax(280px,.88fr);
+    gap:clamp(32px,5vw,64px);
+  }
+  #page-tienda .hero-ilu { display:block; }
+  #page-tienda .reloj-ronda { margin-bottom:28px; }
+  #page-tienda .productos-grid { grid-template-columns:repeat(auto-fill,minmax(205px,1fr)); gap:18px; }
+}
+@media (max-width:639px) {
+  #page-tienda .wrap { width:100%; padding-inline:16px; }
+  #page-tienda .hero { padding-top:22px; }
+  #page-tienda .hero h1 { max-width:15ch; font-size:clamp(34px,9vw,44px); }
+  #page-tienda .hero-lede { font-size:14.5px; }
+  #page-tienda .reloj-ronda {
+    grid-template-columns:minmax(0,1fr);
+    width:100%;
+    margin:14px 0 24px;
+  }
+  #page-tienda .reloj-bloque { padding:14px 12px; }
+  #page-tienda .reloj-divisor { width:100%; height:1px; }
+  #page-tienda .reloj-tiempo { max-width:300px; margin-inline:auto; }
+  #page-tienda .reloj-fecha { text-align:center; }
+  #page-tienda .hero-actions { display:grid; grid-template-columns:1fr 1fr; }
+  #page-tienda .hero-actions .btn { width:100%; padding:11px 10px; font-size:13px; white-space:normal; }
+  #page-tienda .hero-datos { gap:10px; }
+  #page-tienda .productos-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+  #page-tienda .producto-foto { aspect-ratio:1 / .9; }
+  #page-tienda .producto-contenido { padding:10px 9px 12px; gap:6px; }
+  #page-tienda .producto-nombre { font-size:13px; }
+  #page-tienda .producto-precio { font-size:17px; }
+  #page-tienda .section-head { margin-bottom:24px; }
+  #page-tienda .como-armar { padding:14px; }
+}
+@media (max-width:380px) {
+  #page-tienda .wrap { padding-inline:12px; }
+  #page-tienda .productos-grid { gap:8px; }
+  #page-tienda .producto-contenido { padding:8px 7px 10px; }
+  #page-tienda .producto-nombre { font-size:12px; }
+  #page-tienda .producto-precio { font-size:16px; }
+}
+</style>
+
+
+<style id="cestaverde-tienda-fix-v2">
+/* Corrección del contador: evita que los números y las unidades se monten */
+#page-tienda .reloj-tiempo {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  align-items: center;
+  justify-items: center;
+  gap: 8px 10px !important;
+  width: 100%;
+  max-width: 230px;
+  margin-inline: auto;
+  white-space: normal !important;
+  line-height: 1;
+}
+#page-tienda .reloj-par {
+  display: inline-flex !important;
+  justify-content: center;
+  align-items: baseline;
+  min-width: 0;
+  margin: 0 !important;
+  white-space: nowrap;
+}
+#page-tienda .reloj-num {
+  display: inline-block;
+  min-width: 1.45ch;
+  font-size: clamp(30px, 3.2vw, 42px);
+  line-height: 1;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+#page-tienda .reloj-unit {
+  display: inline-block;
+  font-size: .38em;
+  line-height: 1;
+  margin-left: 3px;
+}
+#page-tienda .reloj-bloque:first-child {
+  min-width: 0;
+}
+#page-tienda .reloj-bloque:last-child {
+  min-width: 0;
+  justify-content: center;
+}
+#page-tienda .reloj-fecha {
+  max-width: 12ch;
+  overflow-wrap: normal;
+}
+@media (max-width: 639px) {
+  #page-tienda .reloj-ronda {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+  #page-tienda .reloj-tiempo {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    max-width: 100%;
+    gap: 4px !important;
+  }
+  #page-tienda .reloj-num {
+    font-size: clamp(25px, 7vw, 34px);
+    min-width: 1.35ch;
+  }
+  #page-tienda .reloj-unit {
+    font-size: .34em;
+    margin-left: 2px;
+  }
+  #page-tienda .reloj-bloque {
+    padding: 14px 12px !important;
+  }
+  #page-tienda .reloj-fecha {
+    max-width: none;
+    font-size: clamp(22px, 6vw, 28px);
+  }
+}
+@media (min-width: 900px) {
+  #page-tienda .hero-grid {
+    grid-template-columns: minmax(0, 1.12fr) minmax(300px, .88fr) !important;
+    gap: clamp(34px, 5vw, 64px) !important;
+  }
+  #page-tienda .hero-grid > div:first-child {
+    min-width: 0;
+  }
+  #page-tienda .hero-ilu {
+    display: block !important;
+  }
+}
+</style>
+
 </head>
 <body>
 
@@ -484,13 +886,25 @@
       </div>
     </a>
     <ul class="nav-links">
-      <li><a href="#catalogo">Catálogo</a></li>
-      <li><a href="#tarifas">Tarifas</a></li>
+      <li><a href="#tienda" data-page-link="tienda">Tienda</a></li>
+      <li><a href="#conservacion" data-page-link="conservacion">Cuida y conserva</a></li>
+      <li><a href="#cocina" data-page-link="cocina">Inspírate en tu cocina</a></li>
+      <li><a href="#tarifas">Delivery</a></li>
     </ul>
-    <a href="#catalogo" class="nav-cta">Armar mi canasta</a>
+    <a href="#tienda" class="nav-cta" data-page-link="tienda" data-scroll-target="catalogo">Armar mi canasta</a>
   </div>
 </nav>
+<div class="site-subnav">
+  <a class="active" href="#tienda" data-page-link="tienda">Tienda</a>
+  <a href="#conservacion" data-page-link="conservacion">Cuida y conserva</a>
+  <a href="#cocina" data-page-link="cocina">Inspírate en tu cocina</a>
+</div>
+<style>
+.site-subnav a.active,.site-subnav a:hover{background:#e3eee1;color:#23533a}
+@media(min-width:900px){.site-subnav{display:none}}
+</style>
 
+<main id="page-tienda" class="page-view active" data-page-view="tienda">
 <header class="hero">
   <div class="wrap">
     <div class="hero-grid">
@@ -660,6 +1074,52 @@
   </div>
 </section>
 
+
+
+</main>
+<main id="page-conservacion" class="page-view" data-page-view="conservacion">
+<section id="conservacion"><header class="hero"><div class="wrap hero-grid"><div><div class="eyebrow">Pequeños cuidados, más frescura</div><h1>Cuida y conserva tus verduras</h1><p>Aprende a guardar, preparar y congelar tus alimentos para disfrutarlos por más tiempo y aprovechar cada compra.</p><a class="btn" href="#guias">Explorar consejos</a></div><img src="https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=1100&q=85" alt="Verduras frescas organizadas para conservar"></div></header>
+<section class="section" id="guias"><div class="wrap"><div class="head"><div class="eyebrow">Guías prácticas</div><h2>Aprende a conservar cada alimento</h2><p>Consejos sencillos para tu cocina. Los tiempos pueden variar según la frescura inicial, temperatura y manipulación.</p></div>
+<div class="grid" id="cvConservaGrid" aria-live="polite"><p class="meta">Cargando consejos de conservación…</p></div>
+<!-- Contenido editorial cargado desde Firestore -->
+<div hidden><article class="card"><img src="https://images.unsplash.com/photo-1579113800032-c38bd7635818?auto=format&fit=crop&w=900&q=85" alt="Hojas verdes"><div class="cardbody"><span class="tag">Hojas y hierbas</span><h3>Lechuga, espinaca y hierbas</h3><p>Retira hojas dañadas, evita guardarlas mojadas y utiliza un recipiente ventilado con papel absorbente si hace falta.</p><div class="meta">Refrigeración · Humedad controlada</div><div class="guide-video-title">Aprende mirando: hojas y hierbas</div><div class="guide-video"><iframe src="https://www.youtube.com/embed/7gfpnWx8tZI" title="Video corto de CestaVerde sobre hojas y hierbas" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div><a class="guide-video-link" href="https://www.youtube.com/shorts/7gfpnWx8tZI" target="_blank" rel="noopener noreferrer">Ver este video en YouTube ↗</a></div></article>
+<article class="card"><img src="https://images.unsplash.com/photo-1592924357228-91a4daadcfea?auto=format&fit=crop&w=900&q=85" alt="Tomates"><div class="cardbody"><span class="tag">Sensibles al frío</span><h3>Tomates</h3><p>Si aún están verdes o firmes, deja que maduren a temperatura ambiente. Refrigera los muy maduros si necesitas retrasar su deterioro.</p><div class="meta">Maduración · Temperatura</div></div></article>
+<article class="card"><img src="https://images.unsplash.com/photo-1518977676601-b53f82aba655?auto=format&fit=crop&w=900&q=85" alt="Papas"><div class="cardbody"><span class="tag">Tubérculos</span><h3>Papa y camote</h3><p>Guárdalos en un lugar fresco, seco, oscuro y ventilado. Evita bolsas cerradas y la exposición al sol.</p><div class="meta">Almacenamiento · Ventilación</div></div></article>
+<article class="card"><img src="https://images.unsplash.com/photo-1445282768818-728615cc910a?auto=format&fit=crop&w=900&q=85" alt="Zanahorias"><div class="cardbody"><span class="tag">Raíces</span><h3>Zanahoria y betarraga</h3><p>Retira las hojas si vienen con ellas, guarda las raíces limpias y secas en refrigeración, dentro de un recipiente o bolsa adecuada.</p><div class="meta">Refrigeración · Preparación</div></div></article>
+<article class="card"><img src="https://images.unsplash.com/photo-1568584711075-3d021a7c3b5a?auto=format&fit=crop&w=900&q=85" alt="Brócoli"><div class="cardbody"><span class="tag">Verduras de flor</span><h3>Brócoli y coliflor</h3><p>Refrigera sin lavar y utiliza pronto. Para congelar, corta en floretes y blanquea antes de enfriar y empacar.</p><div class="meta">Refrigeración · Congelación</div></div></article>
+<article class="card"><img src="https://images.unsplash.com/photo-1518843875459-f738682238a6?auto=format&fit=crop&w=900&q=85" alt="Verduras cortadas"><div class="cardbody"><span class="tag">Congelación</span><h3>Cómo congelar verduras</h3><p>Lava, corta, blanquea cuando corresponda, enfría rápidamente, seca y congela en porciones etiquetadas.</p><div class="meta">Preparación · Porciones</div></div></article>
+</div></div></div>
+<section class="section" id="videos-cestaverde"><div class="wrap"><div class="head"><div class="eyebrow">Más contenido de nuestra cocina</div><h2>Otros videos y demostraciones</h2><p>Además de los videos que acompañan cada guía y receta, aquí encontrarás otras publicaciones de CestaVerde.</p></div><div class="video-gallery video-gallery-single"><article class="video-card"><div class="video-frame video-horizontal"><iframe src="https://www.youtube.com/embed/xuYb0-MfYRw" title="Video de CestaVerde en YouTube" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div><div class="video-caption"><strong>Video de YouTube</strong><span>Contenido de nuestra cocina</span><a href="https://www.youtube.com/watch?v=xuYb0-MfYRw" target="_blank" rel="noopener noreferrer">Si no carga, ver en YouTube ↗</a></div></article></div></div></section>
+<section class="section" id="bitacora-conservacion"><div class="wrap">
+<div class="head"><div class="eyebrow">Bitácora CestaVerde · Lima</div><h2>Experimentos reales de conservación</h2>
+<p>Este espacio está pensado para documentar pruebas hechas en casa: qué verdura se evaluó, cómo se guardó y qué ocurrió con el paso de los días. Los resultados se publicarán cuando la prueba se haya realizado; no presentamos consejos como si fueran experimentos ya comprobados.</p></div>
+<div class="tips" id="experimentosPublicados">
+ <article class="tip"><b>¿Qué encontrarás aquí?</b><p>Registros con fecha de inicio, método, lugar de almacenamiento, fotografías del avance y una conclusión basada en lo observado.</p></article>
+ <article class="tip"><b>Una prueba a la vez</b><p>Compararemos métodos bajo condiciones cotidianas de Lima y anotaremos también la humedad, la temperatura aproximada y cualquier cambio visible.</p></article>
+</div>
+</div></section>
+<section class="section"><div class="wrap"><div class="head"><div class="eyebrow">Antes de guardar</div><h2>Cuatro hábitos que ayudan</h2></div><div class="tips">
+<div class="tip"><b>1. Separa lo dañado</b><p>Una pieza deteriorada puede acelerar el deterioro de las que están en contacto con ella.</p></div>
+<div class="tip"><b>2. No laves todo por adelantado</b><p>En muchos productos, la humedad superficial favorece el deterioro. Lava antes de consumir, salvo que tengas un método de secado y almacenamiento adecuado.</p></div>
+<div class="tip"><b>3. Usa recipientes adecuados</b><p>Permite cierta ventilación cuando el producto lo necesita y evita cerrar alimentos húmedos herméticamente.</p></div>
+<div class="tip"><b>4. Revisa tu refrigeradora</b><p>Mantén una temperatura segura, organiza los alimentos y consume primero los que llevan más tiempo.</p></div>
+</div></div></section>
+</section>
+
+
+</main>
+<main id="page-cocina" class="page-view" data-page-view="cocina">
+<section id="cocina"><header class="hero"><div class="wrap hero-grid"><div><div class="eyebrow">De nuestra cocina a tu mesa</div><h1>Inspírate en tu cocina</h1><p>Recetas criollas de El Misti, consejos de nuestro equipo de cocina y preparaciones sencillas para aprovechar lo que tienes en tu despensa.</p><a class="btn" href="#misti">Descubrir recetas</a></div><img src="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=1100&q=85" alt="Mesa con comida casera"></div></header>
+<section class="section" id="misti"><div class="wrap"><div class="head"><div class="eyebrow">Recetas del restaurante</div><h2>De la cocina de El Misti</h2><p>Platos criollos que forman parte de nuestra cocina. Explora sus ingredientes y solicita el paquete para prepararlos en casa.</p></div>
+<div class="grid" id="cvRecetasMistiGrid" aria-live="polite"><p class="meta">Cargando recetas…</p></div>
+<div class="recipe-detail" id="recipeDetail"><button class="btn light" id="closeDetail" type="button">← Volver a recetas</button><div class="detail-grid" style="margin-top:18px"><div><span class="tag" id="detailTag">Receta de El Misti</span><h2 id="detailTitle"></h2><p id="detailDesc"></p><div id="detailVideo" class="recipe-video-note">El video de esta preparación se añadirá cuando esté publicado por la cocina de El Misti.</div><h3>Ingredientes y cantidades</h3><p id="detailYield" class="meta"></p><ul class="ingredients" id="detailIngredients"></ul></div><div><h3>Preparación</h3><ol class="steps" id="detailSteps"></ol><div class="kit"><h4>Agrega ingredientes a tu canasta</h4><p>Los productos frescos disponibles en CestaVerde se suman a la misma canasta de tu compra. Los ingredientes que todavía no vendemos se muestran por separado para que puedas completarlos.</p><ul id="kitList"></ul><button class="btn" id="kitAddButton" type="button">Agregar productos disponibles a mi canasta</button><p id="kitFeedback" class="note" aria-live="polite"></p><p class="note">Los precios se toman del catálogo y de la ronda vigente. No se inventan precios para ingredientes que no estén en la tienda.</p></div></div></div></div>
+</div></section>
+<section class="section" id="tambien"><div class="wrap"><div class="head"><div class="eyebrow">Aprovecha lo que tienes</div><h2>También puedes preparar...</h2><p>Ideas sencillas para transformar lo que quedó en tu despensa en algo delicioso. ¡Aprovecha tus verduras y evita desperdiciar comida!</p></div>
+<div class="grid" id="cvRecetasExtraGrid" aria-live="polite"></div></div></section>
+</section>
+
+
+</main>
 <footer>
   <div class="wrap">
     <div class="footer-grid">
@@ -2231,6 +2691,33 @@ function escucharPedido(){
   }
 }
 
+// API pública para que los kits editoriales usen la misma canasta del catálogo.
+window.agregarProductosCesta = function(items, nombreKit){
+  if (pedidoBloqueado()){
+    alert('Tu pedido de esta ronda ya está confirmado y no se puede modificar.');
+    return { ok:false, reason:'pedido_bloqueado' };
+  }
+  const agregados=[];
+  const noDisponibles=[];
+  (items||[]).forEach(item=>{
+    const producto=getProducto(item.codigo);
+    const cantidad=Number(item.cantidad||0);
+    if(!producto || !(cantidad>0) || disponibilidadProductos[item.codigo]===false){
+      noDisponibles.push(item.nombre||item.codigo); return;
+    }
+    const actual=(carrito[item.codigo]&&carrito[item.codigo].qty)||0;
+    carrito[item.codigo]={qty:+(actual+cantidad).toFixed(2)};
+    agregados.push(producto.nombre);
+  });
+  guardar(LS_CARRITO,carrito);
+  renderCartBar();
+  if(agregados.length){
+    const bar=$('cartBar');
+    if(bar) bar.classList.add('visible');
+  }
+  return {ok:agregados.length>0, agregados, noDisponibles, nombreKit:nombreKit||''};
+};
+
 function init(){
   window.cerrarDrawer = cerrarDrawer;
 
@@ -2312,5 +2799,256 @@ if (document.readyState === 'loading'){
 }
 
 </script>
+
+<script>
+document.querySelectorAll('.site-subnav a').forEach(a=>{
+  a.addEventListener('click',()=>{
+    document.querySelectorAll('.site-subnav a').forEach(x=>x.classList.remove('active'));
+    a.classList.add('active');
+  });
+});
+</script>
+
+<script id="cestaverde-editorial">
+(function(){
+ const recetas={
+  lomo:{titulo:'Lomo saltado',desc:'Salteado criollo de carne, cebolla, tomate y ají amarillo, acompañado de arroz y papas.',tiempo:'35 min',porciones:'4 porciones',video:'',ingredientes:[
+   ['Carne de res','600 g','No disponible en catálogo'],['Tomate Katia','2 unidades','PR-004',0.5],['Cebolla roja','1 unidad','PR-005',0.35],['Ají escabeche','1 unidad','PR-016',0.10],['Papa amarilla','500 g','PR-001',0.5],['Arroz','2 tazas','No disponible en catálogo'],['Ajo','2 dientes','PR-014',0.03],['Sillao y vinagre','Al gusto','No disponible en catálogo']
+  ],pasos:['Corta la carne en tiras y sazónala.','Corta la cebolla, el tomate y el ají en piezas gruesas.','Dora la carne en una sartén o wok bien caliente.','Incorpora cebolla, tomate y ají; saltea brevemente.','Añade sillao y un toque de vinagre.','Sirve con arroz y papas fritas.']},
+  aji:{titulo:'Ají de gallina',desc:'Preparación cremosa de gallina o pollo deshilachado con ají amarillo, servida con papa y arroz.',tiempo:'50 min',porciones:'4 porciones',video:'',ingredientes:[
+   ['Pollo o gallina','500 g','No disponible en catálogo'],['Ají escabeche','3 unidades','PR-016',0.15],['Cebolla roja','1 unidad','PR-005',0.25],['Papa amarilla','4 unidades','PR-001',0.6],['Ajo','2 dientes','PR-014',0.03],['Leche, pan y nueces','Según preparación','No disponible en catálogo'],['Arroz','2 tazas','No disponible en catálogo']
+  ],pasos:['Cocina el pollo y deshiláchalo; reserva el caldo.','Prepara un aderezo con cebolla, ajo y ají amarillo.','Remoja el pan con leche y licúalo con parte del caldo.','Integra la mezcla al aderezo y cocina hasta espesar.','Añade el pollo deshilachado y ajusta la textura.','Sirve con papa sancochada y arroz.']},
+  tallarines:{titulo:'Tallarines verdes',desc:'Pasta con salsa de albahaca y espinaca, inspirada en la cocina casera peruana.',tiempo:'30 min',porciones:'4 porciones',video:'',ingredientes:[
+   ['Albahaca','1 atado','PR-011',1],['Espinaca','1 atado','PR-025',1],['Pasta','400 g','No disponible en catálogo'],['Cebolla roja','½ unidad','PR-005',0.15],['Ajo','2 dientes','PR-014',0.03],['Leche, queso y nueces','Según preparación','No disponible en catálogo']
+  ],pasos:['Lava y escurre la albahaca y la espinaca.','Prepara un aderezo suave con cebolla y ajo.','Licúa las hojas con el aderezo y los ingredientes cremosos.','Cocina la salsa a fuego bajo hasta integrar sabores.','Mezcla con la pasta cocida y sirve caliente.']},
+  'crema-zapallo':{titulo:'Crema de zapallo',desc:'Una crema suave y reconfortante para aprovechar zapallo y verduras de tu despensa.',tiempo:'35 min',porciones:'4 porciones',video:'',ingredientes:[
+   ['Zapallo','700 g','No disponible en catálogo'],['Cebolla roja','½ unidad','PR-005',0.15],['Ajo','1 diente','PR-014',0.02],['Papa amarilla','1 unidad','PR-001',0.15],['Leche o caldo','1 taza','No disponible en catálogo'],['Sal y pimienta','Al gusto','No disponible en catálogo']
+  ],pasos:['Pela y corta el zapallo y la papa en cubos.','Pica la cebolla y el ajo; sofríelos hasta que estén suaves.','Añade el zapallo, la papa y agua o caldo suficiente para cubrir.','Cocina hasta que las verduras estén tiernas.','Licúa con cuidado hasta obtener una crema homogénea.','Ajusta la sal y sirve caliente.']},
+  chimichurri:{titulo:'Chimichurri de perejil',desc:'Salsa fresca y aromática para acompañar carnes, papas y verduras.',tiempo:'10 min',porciones:'1 taza',video:'',ingredientes:[
+   ['Perejil fresco','1 taza picada','No disponible en catálogo'],['Ajo','2 dientes','PR-014',0.03],['Vinagre','3 cucharadas','No disponible en catálogo'],['Aceite','½ taza','No disponible en catálogo'],['Orégano, sal y ají','Al gusto','No disponible en catálogo']
+  ],pasos:['Lava y seca muy bien el perejil.','Pica finamente el perejil y el ajo.','Mezcla con vinagre, aceite y orégano.','Sazona con sal y ají al gusto.','Deja reposar unos minutos para integrar los sabores.','Sirve como acompañamiento y conserva refrigerado.']},
+  'crema-huacatay':{titulo:'Crema de huacatay',desc:'Una salsa peruana de hierbas para acompañar papas, choclo y otras preparaciones.',tiempo:'15 min',porciones:'4 porciones',video:'',ingredientes:[
+   ['Huacatay','1 atado pequeño','No disponible en catálogo'],['Papa amarilla sancochada','1 unidad','PR-001',0.15],['Ajo','1 diente','PR-014',0.02],['Queso fresco','100 g','No disponible en catálogo'],['Leche','¼ taza','No disponible en catálogo'],['Sal','Al gusto','No disponible en catálogo']
+  ],pasos:['Lava y deshoja el huacatay.','Coloca las hojas en la licuadora con el ajo y el queso.','Añade la papa sancochada para dar cuerpo a la crema.','Agrega la leche poco a poco hasta lograr la textura deseada.','Prueba y ajusta la sal.','Sirve con papas, choclo o verduras.']},
+  'cebolla-encurtida':{titulo:'Cebolla roja encurtida',desc:'Una preparación práctica, ácida y crocante para darle vida a tus comidas.',tiempo:'15 min + reposo',porciones:'1 frasco',video:'https://youtube.com/shorts/q5Fm5qRDpxY?si=nyXTnVPjhISDCO5C',ingredientes:[
+   ['Cebolla roja','2 unidades','PR-005',0.5],['Ajo','1 diente','PR-014',0.02],['Vinagre','½ taza','No disponible en catálogo'],['Agua','½ taza','No disponible en catálogo'],['Sal y azúcar','Al gusto','No disponible en catálogo']
+  ],pasos:['Corta la cebolla en plumas finas.','Colócala en un frasco limpio junto con el ajo.','Mezcla el vinagre, el agua, la sal y una pizca de azúcar.','Vierte el líquido hasta cubrir la cebolla.','Deja reposar y enfriar antes de tapar.','Refrigera y utiliza utensilios limpios al servir.']},
+  ensalada:{titulo:'Ensalada de temporada',desc:'Combina verduras frescas disponibles y crea un acompañamiento colorido y sencillo.',tiempo:'15 min',porciones:'4 porciones',video:'',ingredientes:[
+   ['Tomate Katia','2 unidades','PR-004',0.5],['Cebolla roja','¼ unidad','PR-005',0.1],['Ajo','1 diente','PR-014',0.02],['Hojas verdes de temporada','2 tazas','No disponible en catálogo'],['Limón y aceite','Al gusto','No disponible en catálogo'],['Sal y pimienta','Al gusto','No disponible en catálogo']
+  ],pasos:['Lava y seca cuidadosamente las verduras.','Corta el tomate y la cebolla.','Prepara un aliño con limón, aceite, sal y pimienta.','Mezcla las hojas verdes con el tomate y la cebolla.','Añade el aliño justo antes de servir.','Sirve fresca como acompañamiento.']},
+  'aceite-albahaca':{titulo:'Aceite de albahaca',desc:'Una forma sencilla de aprovechar hojas frescas y aromatizar pastas, panes y verduras.',tiempo:'10 min',porciones:'¾ taza',video:'',ingredientes:[
+   ['Albahaca fresca','1 taza de hojas','PR-011',0.5],['Ajo','½ diente','PR-014',0.01],['Aceite de oliva','½ taza','No disponible en catálogo'],['Sal','Una pizca','No disponible en catálogo']
+  ],pasos:['Lava las hojas de albahaca y sécalas por completo.','Coloca las hojas en la licuadora con el aceite.','Añade una pequeña cantidad de ajo y una pizca de sal.','Procesa hasta integrar y obtener un aceite verde.','Prueba y ajusta la intensidad a tu gusto.','Guarda refrigerado en un recipiente limpio y úsalo pronto.']}
+ };
+ let recetaActiva=null;
+ let recipeScrollPosition=0;
+ const $=id=>document.getElementById(id);
+ const esc=s=>String(s??'').replace(/[&<>\"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[c]));
+ function abrirReceta(id){
+  const r=recetas[id]; if(!r)return; recetaActiva=id;
+  recipeScrollPosition=window.scrollY;
+  document.body.classList.add('recipe-modal-open');
+  $('recipeDetail').setAttribute('role','dialog');
+  $('recipeDetail').setAttribute('aria-modal','true');
+  $('recipeDetail').setAttribute('aria-label','Receta: '+r.titulo);
+  $('detailTitle').textContent=r.titulo; $('detailDesc').textContent=r.desc;
+  $('detailYield').textContent=r.tiempo+' · '+r.porciones;
+  $('detailIngredients').innerHTML=r.ingredientes.map(i=>'<li><strong>'+i[0]+'</strong> — '+i[1]+'</li>').join('');
+  $('detailSteps').innerHTML=r.pasos.map(x=>'<li>'+x+'</li>').join('');
+  $('kitList').innerHTML=r.ingredientes.map(i=>'<li class="'+(i[2].startsWith('PR-')?'kit-item-ready':'kit-item-muted')+'">'+i[0]+' · '+i[1]+' — '+(i[2].startsWith('PR-')?'En catálogo':'Completar por fuera de CestaVerde')+'</li>').join('');
+  const videoId=r.video?(String(r.video).match(/(?:youtu\.be\/|v=|shorts\/|embed\/)([A-Za-z0-9_-]{11})/)||[])[1]:null;
+  $('detailVideo').innerHTML=videoId?'<div class="recipe-embed"><iframe src="https://www.youtube.com/embed/'+videoId+'" title="Video de '+esc(r.titulo)+'" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div><a class="recipe-youtube-link" href="https://www.youtube.com/watch?v='+videoId+'" target="_blank" rel="noopener noreferrer">Si el reproductor no carga, mira esta preparación en YouTube ↗</a>':'Esta receta todavía no tiene un video publicado.';
+  $('kitFeedback').textContent='';
+  $('recipeDetail').classList.add('open');
+  $('recipeDetail').scrollTop=0;
+  $('closeDetail').focus({preventScroll:true});
+ }
+ function cerrarReceta(){
+  $('recipeDetail').classList.remove('open');
+  document.body.classList.remove('recipe-modal-open');
+  window.scrollTo({top:recipeScrollPosition,behavior:'instant'});
+ }
+ document.querySelectorAll('.recipe-btn').forEach(b=>b.addEventListener('click',()=>abrirReceta(b.dataset.id)));
+ $('closeDetail')?.addEventListener('click',cerrarReceta);
+ document.addEventListener('keydown',e=>{
+  if(e.key==='Escape' && $('recipeDetail')?.classList.contains('open')) cerrarReceta();
+ });
+ $('kitAddButton')?.addEventListener('click',()=>{
+  if(!recetaActiva)return;
+  const r=recetas[recetaActiva];
+  const items=r.ingredientes.filter(i=>i[2].startsWith('PR-')).map(i=>({codigo:i[2],cantidad:i[3],nombre:i[0]}));
+  if(typeof window.agregarProductosCesta!=='function'){$('kitFeedback').textContent='La canasta todavía está cargando. Intenta nuevamente en unos segundos.';return;}
+  const result=window.agregarProductosCesta(items,r.titulo);
+  $('kitFeedback').textContent=result.ok?'Se agregaron a tu canasta: '+result.agregados.join(', ')+'. '+(result.noDisponibles.length?'No disponibles ahora: '+result.noDisponibles.join(', '):''):'No se pudo agregar ningún producto. Revisa la disponibilidad de la ronda.';
+ });
+
+})();
+</script>
+<script id="cestaverde-page-router">
+(function () {
+  const pages = ["tienda", "conservacion", "cocina"];
+  const labels = {
+    tienda: "Tienda",
+    conservacion: "Cuida y conserva",
+    cocina: "Inspírate en tu cocina"
+  };
+
+  function currentPageFromHash() {
+    const key = (window.location.hash || "#tienda").slice(1).split("?")[0];
+    return pages.includes(key) ? key : "tienda";
+  }
+
+  function showPage(page, scrollTarget) {
+    if (!pages.includes(page)) page = "tienda";
+
+    document.querySelectorAll("[data-page-view]").forEach(function (view) {
+      view.classList.toggle("active", view.dataset.pageView === page);
+    });
+
+    document.querySelectorAll("[data-page-link]").forEach(function (link) {
+      const active = link.dataset.pageLink === page;
+      link.classList.toggle("active", active);
+      if (active) link.setAttribute("aria-current", "page");
+      else link.removeAttribute("aria-current");
+    });
+
+    document.title = "CestaVerde — " + labels[page];
+
+    if (scrollTarget) {
+      requestAnimationFrame(function () {
+        const target = document.getElementById(scrollTarget);
+        if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+        else window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    } else {
+      window.scrollTo(0, 0);
+    }
+  }
+
+  document.addEventListener("click", function (event) {
+    const link = event.target.closest("[data-page-link]");
+    if (!link) return;
+    event.preventDefault();
+    const page = link.dataset.pageLink;
+    const target = link.dataset.scrollTarget || null;
+    const hash = "#" + page;
+    if (window.location.hash !== hash) history.pushState({ page: page }, "", hash);
+    showPage(page, target);
+  });
+
+  window.addEventListener("popstate", function () {
+    showPage(currentPageFromHash());
+  });
+
+  window.addEventListener("hashchange", function () {
+    const page = currentPageFromHash();
+    showPage(page);
+  });
+
+  showPage(currentPageFromHash());
+})();
+</script>
+
+
+<script type="importmap">
+{"imports":{"firebase/app":"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js","firebase/firestore":"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js"}}
+</script>
+<script type="module">
+import { initializeApp, getApps } from "firebase/app";
+import { getFirestore, collection, getDocs } from "firebase/firestore";
+
+const cvFirebaseConfig = {
+  apiKey: "AIzaSyAonWel671riadA7rP7yKTWFy1APCad1LI",
+  authDomain: "misti-panel.firebaseapp.com",
+  projectId: "misti-panel",
+  storageBucket: "misti-panel.firebasestorage.app",
+  messagingSenderId: "1087729241176",
+  appId: "1:1087729241176:web:82eeae27c92bfdb51f0e2d"
+};
+const cvApp = getApps().find(a => a.name === "cestaverde-public") || initializeApp(cvFirebaseConfig, "cestaverde-public");
+const cvDb = getFirestore(cvApp);
+const cvEsc = v => String(v ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const cvUrl = v => {
+  try { const u = new URL(String(v || "")); return ["https:","http:"].includes(u.protocol) ? u.href : ""; }
+  catch { return ""; }
+};
+const cvVideoId = v => (String(v || "").match(/(?:youtu\.be\/|v=|shorts\/|embed\/)([A-Za-z0-9_-]{11})/) || [])[1] || "";
+const cvArr = v => Array.isArray(v) ? v : [];
+let cvPublicRecipes = [];
+
+function cvCard(item, kind) {
+  const img = cvUrl(item.imagen) || "https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=900&q=80";
+  const title = cvEsc(item.titulo || "Sin título");
+  const category = cvEsc(item.categoria || (kind === "recipe" ? "Receta" : "Consejo"));
+  const desc = cvEsc(item.descripcion || "");
+  const detail = kind === "recipe"
+    ? `<button class="btn recipe-btn" type="button" data-cv-recipe="${cvEsc(item.id)}">Ver receta y kit</button>`
+    : (cvUrl(item.link) ? `<a class="btn" href="${cvEsc(cvUrl(item.link))}" target="_blank" rel="noopener noreferrer">Ver recurso ↗</a>` : "");
+  return `<article class="card"><img src="${cvEsc(img)}" alt="${title}" loading="lazy"><div class="cardbody"><span class="tag">${category}</span><h3>${title}</h3><p>${desc}</p><div class="meta">${category}</div>${detail}</div></article>`;
+}
+function cvRenderGuides(items) {
+  const target = document.getElementById("cvConservaGrid");
+  if (!target) return;
+  target.innerHTML = items.length ? items.map(x => cvCard(x, "guide")).join("") : '<p class="meta">Pronto compartiremos consejos para cuidar y conservar tus verduras.</p>';
+}
+function cvRenderRecipes(items) {
+  const main = document.getElementById("cvRecetasMistiGrid");
+  const extra = document.getElementById("cvRecetasExtraGrid");
+  if (!main || !extra) return;
+  main.innerHTML = items.length ? items.slice(0,3).map(x => cvCard(x,"recipe")).join("") : '<p class="meta">Pronto publicaremos nuevas recetas.</p>';
+  extra.innerHTML = items.slice(3).map(x => cvCard(x,"recipe")).join("");
+}
+function cvOpenRecipe(id) {
+  const r = cvPublicRecipes.find(x => x.id === id);
+  if (!r) return;
+  const detail = document.getElementById("recipeDetail");
+  const ingredients = cvArr(r.ingredientes);
+  const steps = cvArr(r.pasos);
+  document.body.classList.add("recipe-modal-open");
+  detail.setAttribute("role","dialog"); detail.setAttribute("aria-modal","true");
+  detail.setAttribute("aria-label","Receta: " + (r.titulo || ""));
+  document.getElementById("detailTag").textContent = r.categoria || "Receta CestaVerde";
+  document.getElementById("detailTitle").textContent = r.titulo || "";
+  document.getElementById("detailDesc").textContent = r.descripcion || "";
+  document.getElementById("detailYield").textContent = r.rendimiento || "";
+  document.getElementById("detailIngredients").innerHTML = ingredients.map(i => {
+    if (typeof i === "string") return `<li>${cvEsc(i)}</li>`;
+    return `<li><strong>${cvEsc(i.nombre || "")}</strong> — ${cvEsc(i.cantidad || "")}</li>`;
+  }).join("");
+  document.getElementById("detailSteps").innerHTML = steps.map(s => `<li>${cvEsc(s)}</li>`).join("");
+  const vid = cvVideoId(r.video);
+  document.getElementById("detailVideo").innerHTML = vid
+    ? `<div class="recipe-embed"><iframe src="https://www.youtube.com/embed/${vid}" title="Video de ${cvEsc(r.titulo)}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div><a class="recipe-youtube-link" href="https://www.youtube.com/watch?v=${vid}" target="_blank" rel="noopener noreferrer">Ver en YouTube ↗</a>`
+    : "Esta receta todavía no tiene un video publicado.";
+  document.getElementById("kitList").innerHTML = ingredients.map(i => `<li>${cvEsc(typeof i === "string" ? i : `${i.nombre || ""} — ${i.cantidad || ""}`)}</li>`).join("");
+  document.getElementById("kitFeedback").textContent = "";
+  detail.classList.add("open"); detail.scrollTop = 0;
+  document.getElementById("closeDetail").focus({preventScroll:true});
+}
+document.addEventListener("click", e => {
+  const btn = e.target.closest("[data-cv-recipe]");
+  if (btn) cvOpenRecipe(btn.dataset.cvRecipe);
+});
+async function cvLoadPublic() {
+  const [guideSnap, recipeSnap] = await Promise.all([
+    getDocs(collection(cvDb, "cestaverde_conserva")),
+    getDocs(collection(cvDb, "cestaverde_recetas"))
+  ]);
+  const guides = guideSnap.docs.map(d => ({id:d.id,...d.data()}))
+    .filter(x => x.publicado === true).sort((a,b)=>(Number(a.orden)||0)-(Number(b.orden)||0));
+  cvPublicRecipes = recipeSnap.docs.map(d => ({id:d.id,...d.data()}))
+    .filter(x => x.publicado === true).sort((a,b)=>(Number(a.orden)||0)-(Number(b.orden)||0));
+  cvRenderGuides(guides);
+  cvRenderRecipes(cvPublicRecipes);
+}
+cvLoadPublic().catch(err => {
+  console.error("No se pudo cargar el contenido CestaVerde desde Firestore:", err);
+  const g = document.getElementById("cvConservaGrid");
+  const r = document.getElementById("cvRecetasMistiGrid");
+  if (g) g.innerHTML = '<p class="meta">No pudimos cargar los consejos en este momento. Intenta nuevamente más tarde.</p>';
+  if (r) r.innerHTML = '<p class="meta">No pudimos cargar las recetas en este momento. Intenta nuevamente más tarde.</p>';
+});
+</script>
+
 </body>
 </html>

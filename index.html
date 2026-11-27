@@ -873,6 +873,15 @@ body.recipe-modal-open { overflow:hidden; }
 }
 </style>
 
+<style id="cestaverde-reels-integrados">
+.cv-reel-frame{position:relative;width:min(100%,420px);aspect-ratio:9/16;margin:14px auto;overflow:hidden;border-radius:18px;background:#101510;box-shadow:0 8px 24px rgba(20,35,25,.12)}
+.cv-reel-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.cv-guide-reel{width:min(100%,260px);margin:12px 0 4px;border-radius:14px}
+.cv-video-fallback{display:inline-block;margin:5px 0 10px;color:#245b3b;font-size:12px;font-weight:800;text-decoration:underline;text-underline-offset:3px}
+.recipe-detail .cv-recipe-reel{width:min(100%,390px);max-height:72dvh}
+#kitAddButton:disabled{opacity:.48;cursor:not-allowed}
+@media(max-width:760px){.recipe-detail .cv-recipe-reel{width:min(100%,390px);margin:12px auto 16px}.cv-guide-reel{width:min(100%,220px)}}
+</style>
 </head>
 <body>
 
@@ -1394,6 +1403,14 @@ const escapar = (s) => String(s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':
 const soloDigitos = (s) => String(s||'').replace(/\D/g,'');
 const capitalizar = (s) => String(s||'').split(' ').map(w => w ? w[0].toUpperCase()+w.slice(1) : '').join(' ');
 const getProducto = (codigo) => PRODUCTOS.find(p => p.codigo === codigo);
+window.codigoProductoCestaPorNombre = function(nombre){
+  const norm = v => String(v || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9 ]/g,' ').replace(/\s+/g,' ').trim();
+  const n = norm(nombre);
+  const aliases = {'cebolla':'PR-005','cebolla roja':'PR-005','cebolla morada':'PR-005','ajo':'PR-014','ajo criollo':'PR-014','tomate':'PR-004','tomate katia':'PR-004','papa amarilla':'PR-001','papas amarillas':'PR-001','aji escabeche':'PR-016','aji amarillo':'PR-016','albahaca':'PR-011','albahaca fresca':'PR-011','espinaca':'PR-025','limon':'PR-026','limon citrico':'PR-026','zanahoria':'PR-006','camote amarillo':'PR-008','pepino':'PR-017','huacatay':'PR-019','culantro':'PR-020','perejil':'PR-021'};
+  if (aliases[n]) return aliases[n];
+  const found = PRODUCTOS.find(p => norm(p.nombre) === n);
+  return found ? found.codigo : '';
+};
 
 function filtrarCantidad(raw){
   if (raw == null) return '';
@@ -2972,19 +2989,36 @@ const cvUrl = v => {
   try { const u = new URL(String(v || "")); return ["https:","http:"].includes(u.protocol) ? u.href : ""; }
   catch { return ""; }
 };
-const cvVideoId = v => (String(v || "").match(/(?:youtu\.be\/|v=|shorts\/|embed\/)([A-Za-z0-9_-]{11})/) || [])[1] || "";
+const cvVideoId = v => {
+  const raw = String(v || '').trim();
+  if (!raw) return '';
+  try {
+    const u = new URL(raw, window.location.href);
+    const host = u.hostname.replace(/^www\./,'').replace(/^m\./,'');
+    let id = '';
+    if (host === 'youtu.be') id = u.pathname.split('/').filter(Boolean)[0] || '';
+    else if (host.endsWith('youtube.com') || host === 'youtube-nocookie.com') id = u.searchParams.get('v') || (u.pathname.match(/\/(?:shorts|embed|live|v)\/([A-Za-z0-9_-]{6,})/) || [])[1] || '';
+    return /^[A-Za-z0-9_-]{6,}$/.test(id) ? id : '';
+  } catch { return ''; }
+};
 const cvArr = v => Array.isArray(v) ? v : [];
 let cvPublicRecipes = [];
-
+let cvCurrentKitItems = [];
+let cvCurrentKitTitle = '';
+function cvYouTubeFrame(id, title, extraClass='') {
+  if (!id) return '';
+  return `<div class="cv-reel-frame ${extraClass}"><iframe src="https://www.youtube-nocookie.com/embed/${cvEsc(id)}?playsinline=1&rel=0" title="${cvEsc(title || 'Video CestaVerde')}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>`;
+}
 function cvCard(item, kind) {
-  const img = cvUrl(item.imagen) || "https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=900&q=80";
-  const title = cvEsc(item.titulo || "Sin título");
-  const category = cvEsc(item.categoria || (kind === "recipe" ? "Receta" : "Consejo"));
-  const desc = cvEsc(item.descripcion || "");
-  const detail = kind === "recipe"
-    ? `<button class="btn recipe-btn" type="button" data-cv-recipe="${cvEsc(item.id)}">Ver receta y kit</button>`
-    : (cvUrl(item.recurso || item.link) ? `<a class="btn" href="${cvEsc(cvUrl(item.recurso || item.link))}" target="_blank" rel="noopener noreferrer">Ver recurso ↗</a>` : "");
-  return `<article class="card"><img src="${cvEsc(img)}" alt="${title}" loading="lazy"><div class="cardbody"><span class="tag">${category}</span><h3>${title}</h3><p>${desc}</p><div class="meta">${category}</div>${detail}</div></article>`;
+  const img = cvUrl(item.imagen) || 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=900&q=80';
+  const title = cvEsc(item.titulo || 'Sin título');
+  const category = cvEsc(item.categoria || (kind === 'recipe' ? 'Receta' : 'Consejo'));
+  const desc = cvEsc(item.descripcion || '');
+  const resourceUrl = cvUrl(item.video || item.recurso || item.link);
+  const videoId = cvVideoId(resourceUrl);
+  const videoPreview = kind === 'guide' && videoId ? `${cvYouTubeFrame(videoId, item.titulo || 'Video de conservación', 'cv-guide-reel')}<a class="cv-video-fallback" href="${cvEsc(resourceUrl)}" target="_blank" rel="noopener noreferrer">Abrir video en YouTube ↗</a>` : '';
+  const detail = kind === 'recipe' ? `<button class="btn recipe-btn" type="button" data-cv-recipe="${cvEsc(item.id)}">Ver receta y kit</button>` : (!videoId && resourceUrl ? `<a class="btn" href="${cvEsc(resourceUrl)}" target="_blank" rel="noopener noreferrer">Ver recurso ↗</a>` : '');
+  return `<article class="card"><img src="${cvEsc(img)}" alt="${title}" loading="lazy"><div class="cardbody"><span class="tag">${category}</span><h3>${title}</h3><p>${desc}</p>${videoPreview}<div class="meta">${category}</div>${detail}</div></article>`;
 }
 function cvRenderGuides(items) {
   const target = document.getElementById("cvConservaGrid");
@@ -2998,72 +3032,90 @@ function cvRenderRecipes(items) {
   main.innerHTML = items.length ? items.slice(0,3).map(x => cvCard(x,"recipe")).join("") : '<p class="meta">Pronto publicaremos nuevas recetas.</p>';
   extra.innerHTML = items.slice(3).map(x => cvCard(x,"recipe")).join("");
 }
+function cvIngredientParts(item) {
+  if (item && typeof item === 'object') return {nombre:String(item.nombre || item.producto || ''), cantidad:String(item.cantidad || '')};
+  const raw = String(item || '').trim();
+  const parts = raw.split(/\s+[—–-]\s+/);
+  return {nombre:(parts[0] || raw).trim(), cantidad:(parts.slice(1).join(' — ') || '').trim()};
+}
+function cvKitQuantity(codigo, cantidadTexto) {
+  const q = String(cantidadTexto || '').toLowerCase().replace(',', '.').trim();
+  const num = Number((q.match(/\d+(?:\.\d+)?/) || [])[0] || 0);
+  if (!(num > 0)) return 0;
+  if (/\bkg\b/.test(q)) return num;
+  if (/\bg\b/.test(q)) return num / 1000;
+  const conv = {'PR-005':{unidad:.25},'PR-014':{diente:.02,unidad:.02},'PR-004':{unidad:.25},'PR-001':{unidad:.15},'PR-016':{unidad:.10},'PR-011':{atado:1},'PR-025':{atado:1},'PR-019':{atado:1},'PR-020':{atado:1},'PR-021':{atado:1},'PR-026':{unidad:.08}}[codigo] || {};
+  if (/atado/.test(q)) return num * (conv.atado || 0);
+  if (/diente/.test(q)) return num * (conv.diente || 0);
+  if (/unidad|unidades/.test(q)) return num * (conv.unidad || 0);
+  return 0;
+}
+function cvBuildKit(ingredients) {
+  const items=[];
+  for (const raw of ingredients) {
+    const part=cvIngredientParts(raw);
+    const codigo=window.codigoProductoCestaPorNombre ? window.codigoProductoCestaPorNombre(part.nombre) : '';
+    const cantidad=codigo ? cvKitQuantity(codigo,part.cantidad) : 0;
+    if (codigo && cantidad>0) items.push({codigo,cantidad,nombre:part.nombre});
+  }
+  return items;
+}
 function cvOpenRecipe(id) {
   const r = cvPublicRecipes.find(x => x.id === id);
   if (!r) return;
-  const detail = document.getElementById("recipeDetail");
+  const detail = document.getElementById('recipeDetail');
   const ingredients = cvArr(r.ingredientes);
   const steps = cvArr(r.pasos);
-  document.body.classList.add("recipe-modal-open");
-  detail.setAttribute("role","dialog"); detail.setAttribute("aria-modal","true");
-  detail.setAttribute("aria-label","Receta: " + (r.titulo || ""));
-  document.getElementById("detailTag").textContent = r.categoria || "Receta CestaVerde";
-  document.getElementById("detailTitle").textContent = r.titulo || "";
-  document.getElementById("detailDesc").textContent = r.descripcion || "";
-  document.getElementById("detailYield").textContent = r.rendimiento || "";
-  document.getElementById("detailIngredients").innerHTML = ingredients.map(i => {
-    if (typeof i === "string") return `<li>${cvEsc(i)}</li>`;
-    return `<li><strong>${cvEsc(i.nombre || "")}</strong> — ${cvEsc(i.cantidad || "")}</li>`;
-  }).join("");
-  document.getElementById("detailSteps").innerHTML = steps.map(s => `<li>${cvEsc(s)}</li>`).join("");
-  const vid = cvVideoId(r.video);
-  document.getElementById("detailVideo").innerHTML = vid
-    ? `<div class="recipe-embed"><iframe src="https://www.youtube.com/embed/${vid}" title="Video de ${cvEsc(r.titulo)}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div><a class="recipe-youtube-link" href="https://www.youtube.com/watch?v=${vid}" target="_blank" rel="noopener noreferrer">Ver en YouTube ↗</a>`
-    : "Esta receta todavía no tiene un video publicado.";
-  document.getElementById("kitList").innerHTML = ingredients.map(i => `<li>${cvEsc(typeof i === "string" ? i : `${i.nombre || ""} — ${i.cantidad || ""}`)}</li>`).join("");
-  document.getElementById("kitFeedback").textContent = "";
-  detail.classList.add("open"); detail.scrollTop = 0;
-  document.getElementById("closeDetail").focus({preventScroll:true});
+  document.body.classList.add('recipe-modal-open');
+  detail.setAttribute('role','dialog'); detail.setAttribute('aria-modal','true');
+  detail.setAttribute('aria-label','Receta: ' + (r.titulo || ''));
+  document.getElementById('detailTag').textContent = r.categoria || 'Receta CestaVerde';
+  document.getElementById('detailTitle').textContent = r.titulo || '';
+  document.getElementById('detailDesc').textContent = r.descripcion || '';
+  document.getElementById('detailYield').textContent = r.rendimiento || '';
+  document.getElementById('detailIngredients').innerHTML = ingredients.map(i => { const p=cvIngredientParts(i); return `<li><strong>${cvEsc(p.nombre)}</strong>${p.cantidad ? ` — ${cvEsc(p.cantidad)}` : ''}</li>`; }).join('');
+  document.getElementById('detailSteps').innerHTML = steps.map(x => `<li>${cvEsc(x)}</li>`).join('');
+  const videoUrl=cvUrl(r.video || r.link || r.recurso);
+  const vid=cvVideoId(videoUrl);
+  document.getElementById('detailVideo').innerHTML = vid ? `${cvYouTubeFrame(vid,r.titulo || 'Video de la receta','cv-recipe-reel')}<a class="recipe-youtube-link" href="${cvEsc(videoUrl)}" target="_blank" rel="noopener noreferrer">Si el reproductor no carga, abrir en YouTube ↗</a>` : 'Esta receta todavía no tiene un video publicado.';
+  cvCurrentKitItems=cvBuildKit(ingredients);
+  cvCurrentKitTitle=r.titulo || 'Receta CestaVerde';
+  document.getElementById('kitList').innerHTML=ingredients.map(i=>{const p=cvIngredientParts(i);const code=window.codigoProductoCestaPorNombre?window.codigoProductoCestaPorNombre(p.nombre):'';const ready=code && cvKitQuantity(code,p.cantidad)>0;return `<li class="${ready?'kit-item-ready':'kit-item-muted'}">${cvEsc(p.nombre)}${p.cantidad?' · '+cvEsc(p.cantidad):''} — ${ready?'Se puede agregar a la canasta':'No disponible como producto en la tienda'}</li>`;}).join('');
+  const addButton=document.getElementById('kitAddButton');
+  if(addButton) addButton.disabled=cvCurrentKitItems.length===0;
+  document.getElementById('kitFeedback').textContent=cvCurrentKitItems.length ? `${cvCurrentKitItems.length} ingrediente(s) del catálogo se pueden agregar. Las cantidades convertidas son aproximadas.` : 'Esta receta no tiene ingredientes con cantidades reconocibles dentro del catálogo actual.';
+  detail.classList.add('open'); detail.scrollTop=0;
+  document.getElementById('closeDetail').focus({preventScroll:true});
 }
 document.addEventListener("click", e => {
   const btn = e.target.closest("[data-cv-recipe]");
   if (btn) cvOpenRecipe(btn.dataset.cvRecipe);
 });
+document.getElementById('kitAddButton')?.addEventListener('click', () => {
+  const feedback=document.getElementById('kitFeedback');
+  if(!cvCurrentKitItems.length){if(feedback)feedback.textContent='Esta receta no tiene productos del catálogo que puedan agregarse.';return;}
+  if(typeof window.agregarProductosCesta!=='function'){if(feedback)feedback.textContent='La canasta todavía está cargando. Intenta nuevamente en unos segundos.';return;}
+  const result=window.agregarProductosCesta(cvCurrentKitItems,cvCurrentKitTitle);
+  if(feedback){const added=result.agregados||[];const missing=result.noDisponibles||[];feedback.textContent=result.ok?`Agregados a tu canasta: ${added.join(', ')}.${missing.length?` No disponibles ahora: ${missing.join(', ')}.`:''}`:(result.reason==='pedido_bloqueado'?'Tu pedido ya está confirmado y no admite cambios.':`No se pudo agregar. Productos no disponibles: ${missing.join(', ')||'revisa la ronda vigente'}.`);}
+});
 async function cvLoadPublic() {
-  try {
-    const [guideSnap, recipeSnap] = await Promise.all([
-      getDocs(collection(cvDb, "cestaverde_conserva")),
-      getDocs(collection(cvDb, "cestaverde_recetas"))
-    ]);
-
-    const guides = guideSnap.docs
-      .map(d => ({ id: d.id, ...d.data() }))
-      .filter(x => x.publicado === true)
-      .sort((a, b) => (Number(a.orden) || 0) - (Number(b.orden) || 0));
-
-    cvPublicRecipes = recipeSnap.docs
-      .map(d => ({ id: d.id, ...d.data() }))
-      .filter(x => x.publicado === true)
-      .sort((a, b) => (Number(a.orden) || 0) - (Number(b.orden) || 0));
-
-    cvRenderGuides(guides);
-    cvRenderRecipes(cvPublicRecipes);
-
-    console.log("CestaVerde: contenido cargado correctamente", {
-      consejos: guides.length,
-      recetas: cvPublicRecipes.length
-    });
-
-  } catch (err) {
-    console.error("Error cargando contenido CestaVerde:", err);
-    throw err;
-  }
+  const [guideSnap, recipeSnap] = await Promise.all([
+    getDocs(collection(cvDb, "cestaverde_conserva")),
+    getDocs(collection(cvDb, "cestaverde_recetas"))
+  ]);
+  const guides = guideSnap.docs.map(d => ({id:d.id,...d.data()}))
+    .filter(x => x.publicado === true).sort((a,b)=>(Number(a.orden)||0)-(Number(b.orden)||0));
+  cvPublicRecipes = recipeSnap.docs.map(d => ({id:d.id,...d.data()}))
+    .filter(x => x.publicado === true).sort((a,b)=>(Number(a.orden)||0)-(Number(b.orden)||0));
+  cvRenderGuides(guides);
+  cvRenderRecipes(cvPublicRecipes);
 }
-
 cvLoadPublic().catch(err => {
-  console.error("No se pudo cargar el contenido CestaVerde:", err);
-
-  // Mostrar error en las secciones correspondientes
+  console.error("No se pudo cargar el contenido CestaVerde desde Firestore:", err);
+  const g = document.getElementById("cvConservaGrid");
+  const r = document.getElementById("cvRecetasMistiGrid");
+  if (g) g.innerHTML = '<p class="meta">No pudimos cargar los consejos en este momento. Intenta nuevamente más tarde.</p>';
+  if (r) r.innerHTML = '<p class="meta">No pudimos cargar las recetas en este momento. Intenta nuevamente más tarde.</p>';
 });
 </script>
 

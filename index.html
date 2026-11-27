@@ -877,19 +877,20 @@ body.recipe-modal-open { overflow:hidden; }
 .cv-guide-videos{margin:14px 0 8px;min-width:0}
 .cv-guide-videos-title{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:0 0 8px;font-size:13px;font-weight:800;color:#315b3e}
 .cv-guide-videos-title span{font-size:10px;font-weight:600;color:#718176;white-space:nowrap}
-.cv-guide-video-track{display:flex;gap:12px;overflow-x:auto;overflow-y:hidden;padding:2px 2px 12px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;overscroll-behavior-inline:contain;touch-action:pan-x;scrollbar-width:thin}
+.cv-guide-video-track{display:flex;gap:14px;overflow-x:auto;overflow-y:hidden;padding:2px 2px 12px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;overscroll-behavior-inline:contain;touch-action:pan-x;scrollbar-width:thin}
 .cv-guide-video-item{flex:0 0 190px;min-width:0;scroll-snap-align:start}
-.cv-guide-reel{width:100%;max-width:none;aspect-ratio:9/16;margin:0 0 4px;border-radius:13px}
+.cv-guide-video-item--horizontal{flex-basis:min(88vw,560px)}
+.cv-guide-video-item--vertical{flex-basis:190px}
 .cv-guide-video-item .cv-video-fallback{margin:3px 0 0}
-@media(min-width:761px){.cv-guide-video-item{flex-basis:190px}}
-
-.cv-reel-frame{position:relative;width:min(100%,420px);aspect-ratio:9/16;margin:14px auto;overflow:hidden;border-radius:18px;background:#101510;box-shadow:0 8px 24px rgba(20,35,25,.12)}
+.cv-reel-frame{position:relative;width:100%;aspect-ratio:16/9;margin:14px auto;overflow:hidden;border-radius:16px;background:#101510;box-shadow:0 8px 24px rgba(20,35,25,.12)}
+.cv-reel-frame--vertical{width:min(100%,390px);aspect-ratio:9/16}
 .cv-reel-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
-.cv-guide-reel{width:min(100%,260px);margin:12px 0 4px;border-radius:14px}
+.cv-guide-videos .cv-reel-frame{margin:0 0 4px}
 .cv-video-fallback{display:inline-block;margin:5px 0 10px;color:#245b3b;font-size:12px;font-weight:800;text-decoration:underline;text-underline-offset:3px}
-.recipe-detail .cv-recipe-reel{width:min(100%,390px);max-height:72dvh}
+.recipe-detail .cv-recipe-reel{width:100%;max-width:680px}
+.recipe-detail .cv-recipe-reel.cv-reel-frame--vertical{width:min(100%,390px);max-width:390px}
 #kitAddButton:disabled{opacity:.48;cursor:not-allowed}
-@media(max-width:760px){.recipe-detail .cv-recipe-reel{width:min(100%,390px);margin:12px auto 16px}.cv-guide-reel{width:min(100%,220px)}}
+@media(max-width:760px){.recipe-detail .cv-recipe-reel{width:100%;margin:12px auto 16px}.recipe-detail .cv-recipe-reel.cv-reel-frame--vertical{width:min(100%,390px)}.cv-guide-video-item--horizontal{flex-basis:88vw}.cv-guide-video-item--vertical{flex-basis:190px}}
 </style>
 </head>
 <body>
@@ -1128,12 +1129,14 @@ body.recipe-modal-open { overflow:hidden; }
 </main>
 <main id="page-cocina" class="page-view" data-page-view="cocina">
 <section id="cocina"><header class="hero"><div class="wrap hero-grid"><div><div class="eyebrow">De nuestra cocina a tu mesa</div><h1>Inspírate en tu cocina</h1><p>Recetas criollas de El Misti, consejos de nuestro equipo de cocina y preparaciones sencillas para aprovechar lo que tienes en tu despensa.</p><a class="btn" href="#misti">Descubrir recetas</a></div><img src="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=1100&q=85" alt="Mesa con comida casera"></div></header>
-<section class="section" id="misti"><div class="wrap"><div class="head"><div class="eyebrow">Recetas del restaurante</div><h2>De la cocina de El Misti</h2><p>Platos criollos que forman parte de nuestra cocina. Explora sus ingredientes y solicita el paquete para prepararlos en casa.</p></div>
+<section class="section" id="misti"><div class="wrap"><div class="head"><div class="eyebrow">Recetas del restaurante</div><h2>De la cocina de El Misti</h2><p>Recetas de platos que forman parte de los menús rotativos de El Misti. Aunque el menú cambia, aquí puedes descubrir cómo se preparan algunos de nuestros platos. Explora sus ingredientes y solicita el paquete para prepararlos en casa.</p></div>
 <div class="grid" id="cvRecetasMistiGrid" aria-live="polite"><p class="meta">Cargando recetas…</p></div>
 <div class="recipe-detail" id="recipeDetail"><button class="btn light" id="closeDetail" type="button">← Volver a recetas</button><div class="detail-grid" style="margin-top:18px"><div><span class="tag" id="detailTag">Receta de El Misti</span><h2 id="detailTitle"></h2><p id="detailDesc"></p><div id="detailVideo" class="recipe-video-note">El video de esta preparación se añadirá cuando esté publicado por la cocina de El Misti.</div><h3>Ingredientes y cantidades</h3><p id="detailYield" class="meta"></p><ul class="ingredients" id="detailIngredients"></ul></div><div><h3>Preparación</h3><ol class="steps" id="detailSteps"></ol><div class="kit"><h4>Agrega ingredientes a tu canasta</h4><p>Los productos frescos disponibles en CestaVerde se suman a la misma canasta de tu compra. Los ingredientes que todavía no vendemos se muestran por separado para que puedas completarlos.</p><ul id="kitList"></ul><button class="btn" id="kitAddButton" type="button">Agregar productos disponibles a mi canasta</button><p id="kitFeedback" class="note" aria-live="polite"></p><p class="note">Los precios se toman del catálogo y de la ronda vigente. No se inventan precios para ingredientes que no estén en la tienda.</p></div></div></div></div>
 </div></section>
-<section class="section" id="tambien"><div class="wrap"><div class="head"><div class="eyebrow">Aprovecha lo que tienes</div><h2>También puedes preparar...</h2><p>Ideas sencillas para transformar lo que quedó en tu despensa en algo delicioso. ¡Aprovecha tus verduras y evita desperdiciar comida!</p></div>
+<section class="section" id="tambien"><div class="wrap"><div class="head"><div class="eyebrow">Ideas para tu cocina</div><h2>También puedes preparar</h2><p>Cremas, salsas, chimichurris, aceites aromatizados, aderezos y guarniciones que puedes elaborar con las verduras y hierbas de CestaVerde.</p></div>
 <div class="grid" id="cvRecetasExtraGrid" aria-live="polite"></div></div></section>
+<section class="section" id="aprovecha-conserva"><div class="wrap"><div class="head"><div class="eyebrow">Dales una nueva vida a tus verduras</div><h2>Aprovecha y conserva</h2><p>Encurtidos y preparaciones para aprovechar mejor los alimentos y conservarlos de forma segura.</p></div>
+<div class="grid" id="cvRecetasConservaGrid" aria-live="polite"></div></div></section>
 </section>
 
 
@@ -3014,9 +3017,14 @@ const cvArr = v => Array.isArray(v) ? v : [];
 let cvPublicRecipes = [];
 let cvCurrentKitItems = [];
 let cvCurrentKitTitle = '';
-function cvYouTubeFrame(id, title, extraClass='') {
+function cvYouTubeFrame(id, title, sourceUrl='', extraClass='') {
   if (!id) return '';
-  return `<div class="cv-reel-frame ${extraClass}"><iframe src="https://www.youtube-nocookie.com/embed/${cvEsc(id)}?playsinline=1&rel=0" title="${cvEsc(title || 'Video CestaVerde')}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>`;
+  const vertical = /\/(?:shorts|reel)\//i.test(String(sourceUrl || ''));
+  const shapeClass = vertical ? 'cv-reel-frame--vertical' : 'cv-reel-frame--horizontal';
+  return `<div class="cv-reel-frame ${shapeClass} ${extraClass}"><iframe src="https://www.youtube-nocookie.com/embed/${cvEsc(id)}?playsinline=1&rel=0" title="${cvEsc(title || 'Video CestaVerde')}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>`;
+}
+function cvRecipeSection(item) {
+  return String(item.seccionPublicacion || item.seccion_publicacion || item.seccion || '').trim().toLowerCase();
 }
 function cvCard(item, kind) {
   const img = cvUrl(item.imagen) || 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=900&q=80';
@@ -3027,7 +3035,7 @@ function cvCard(item, kind) {
   const rawGuideVideos = Array.isArray(item.videos) && item.videos.length ? item.videos : (resourceUrl ? [resourceUrl] : []);
   const guideVideos = kind === 'guide' ? rawGuideVideos.map(v => cvUrl(typeof v === 'string' ? v : (v.url || v.link || v.video))).filter(Boolean).map(url => ({url,id:cvVideoId(url)})).filter(v => v.id) : [];
   const videoId = cvVideoId(resourceUrl);
-  const videoPreview = kind === 'guide' && guideVideos.length ? `<section class="cv-guide-videos" aria-label="Videos sobre ${title}"><div class="cv-guide-videos-title">🎬 Videos sobre este alimento <span>Desliza para ver más</span></div><div class="cv-guide-video-track">${guideVideos.map((v,i)=>`<div class="cv-guide-video-item">${cvYouTubeFrame(v.id, `${item.titulo || 'Conservación'} · Video ${i+1}`, 'cv-guide-reel')}<a class="cv-video-fallback" href="${cvEsc(v.url)}" target="_blank" rel="noopener noreferrer">Ver en YouTube ↗</a></div>`).join('')}</div></section>` : '';
+  const videoPreview = kind === 'guide' && guideVideos.length ? `<section class="cv-guide-videos" aria-label="Videos sobre ${title}"><div class="cv-guide-videos-title">🎬 Videos sobre este alimento <span>Desliza para ver más</span></div><div class="cv-guide-video-track">${guideVideos.map((v,i)=>{const vertical=/\/(?:shorts|reel)\//i.test(v.url);return `<div class="cv-guide-video-item ${vertical?'cv-guide-video-item--vertical':'cv-guide-video-item--horizontal'}">${cvYouTubeFrame(v.id, `${item.titulo || 'Conservación'} · Video ${i+1}`, v.url, 'cv-guide-reel')}<a class="cv-video-fallback" href="${cvEsc(v.url)}" target="_blank" rel="noopener noreferrer">Ver en YouTube ↗</a></div>`;}).join('')}</div></section>` : '';
   const detail = kind === 'recipe' ? `<button class="btn recipe-btn" type="button" data-cv-recipe="${cvEsc(item.id)}">Ver receta y kit</button>` : (!guideVideos.length && !videoId && resourceUrl ? `<a class="btn" href="${cvEsc(resourceUrl)}" target="_blank" rel="noopener noreferrer">Ver recurso ↗</a>` : '');
   return `<article class="card"><img src="${cvEsc(img)}" alt="${title}" loading="lazy"><div class="cardbody"><span class="tag">${category}</span><h3>${title}</h3><p>${desc}</p>${videoPreview}<div class="meta">${category}</div>${detail}</div></article>`;
 }
@@ -3037,11 +3045,21 @@ function cvRenderGuides(items) {
   target.innerHTML = items.length ? items.map(x => cvCard(x, "guide")).join("") : '<p class="meta">Pronto compartiremos consejos para cuidar y conservar tus verduras.</p>';
 }
 function cvRenderRecipes(items) {
-  const main = document.getElementById("cvRecetasMistiGrid");
-  const extra = document.getElementById("cvRecetasExtraGrid");
-  if (!main || !extra) return;
-  main.innerHTML = items.length ? items.slice(0,3).map(x => cvCard(x,"recipe")).join("") : '<p class="meta">Pronto publicaremos nuevas recetas.</p>';
-  extra.innerHTML = items.slice(3).map(x => cvCard(x,"recipe")).join("");
+  const sections = {
+    misti: document.getElementById("cvRecetasMistiGrid"),
+    preparar: document.getElementById("cvRecetasExtraGrid"),
+    conservar: document.getElementById("cvRecetasConservaGrid")
+  };
+  const labels = {
+    misti: 'Pronto publicaremos nuevas recetas de la cocina de El Misti.',
+    preparar: 'Pronto compartiremos más ideas para preparar con tus verduras.',
+    conservar: 'Pronto compartiremos preparaciones para aprovechar y conservar.'
+  };
+  Object.entries(sections).forEach(([section, target]) => {
+    if (!target) return;
+    const selected = items.filter(item => cvRecipeSection(item) === section);
+    target.innerHTML = selected.length ? selected.map(item => cvCard(item, 'recipe')).join('') : `<p class="meta">${labels[section]}</p>`;
+  });
 }
 function cvIngredientParts(item) {
   if (item && typeof item === 'object') return {nombre:String(item.nombre || item.producto || ''), cantidad:String(item.cantidad || '')};
@@ -3080,7 +3098,8 @@ function cvOpenRecipe(id) {
   document.body.classList.add('recipe-modal-open');
   detail.setAttribute('role','dialog'); detail.setAttribute('aria-modal','true');
   detail.setAttribute('aria-label','Receta: ' + (r.titulo || ''));
-  document.getElementById('detailTag').textContent = r.categoria || 'Receta CestaVerde';
+  const sectionLabels = {misti:'Cocina de El Misti',preparar:'También puedes preparar',conservar:'Aprovecha y conserva'};
+  document.getElementById('detailTag').textContent = sectionLabels[cvRecipeSection(r)] || r.categoria || 'Receta CestaVerde';
   document.getElementById('detailTitle').textContent = r.titulo || '';
   document.getElementById('detailDesc').textContent = r.descripcion || '';
   document.getElementById('detailYield').textContent = r.rendimiento || '';
@@ -3088,7 +3107,7 @@ function cvOpenRecipe(id) {
   document.getElementById('detailSteps').innerHTML = steps.map(x => `<li>${cvEsc(x)}</li>`).join('');
   const videoUrl=cvUrl(r.video || r.link || r.recurso);
   const vid=cvVideoId(videoUrl);
-  document.getElementById('detailVideo').innerHTML = vid ? `${cvYouTubeFrame(vid,r.titulo || 'Video de la receta','cv-recipe-reel')}<a class="recipe-youtube-link" href="${cvEsc(videoUrl)}" target="_blank" rel="noopener noreferrer">Si el reproductor no carga, abrir en YouTube ↗</a>` : 'Esta receta todavía no tiene un video publicado.';
+  document.getElementById('detailVideo').innerHTML = vid ? `${cvYouTubeFrame(vid,r.titulo || 'Video de la receta',videoUrl,'cv-recipe-reel')}<a class="recipe-youtube-link" href="${cvEsc(videoUrl)}" target="_blank" rel="noopener noreferrer">Si el reproductor no carga, abrir en YouTube ↗</a>` : 'Esta receta todavía no tiene un video publicado.';
   cvCurrentKitItems=cvBuildKit(ingredients);
   cvCurrentKitTitle=r.titulo || 'Receta CestaVerde';
   document.getElementById('kitList').innerHTML=ingredients.map(i=>{const p=cvIngredientParts(i);const code=window.codigoProductoCestaPorNombre?window.codigoProductoCestaPorNombre(p.nombre):'';const ready=code && cvKitQuantity(code,p.cantidad)>0;return `<li class="${ready?'kit-item-ready':'kit-item-muted'}">${cvEsc(p.nombre)}${p.cantidad?' · '+cvEsc(p.cantidad):''} — ${ready?'Se puede agregar a la canasta':'No disponible como producto en la tienda'}</li>`;}).join('');
